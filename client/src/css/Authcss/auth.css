@@ -1,0 +1,41 @@
+/* .main-wrapper{
+    @apply bg-lime-400 h-screen w-full sm:flex sm:flex-row 
+}
+
+.signin-container{
+    @apply w-full h-full sm:w-1/2 bg-yellow-400 
+}
+
+
+
+.image-container{
+    @apply hidden  sm:block bg-red-500 sm:w-1/2 sm:h-full
+}
+
+.form-wrapper{
+    @apply bg-white w-full h-full
+} */
+
+.main-container{
+    @apply font-medium w-full h-screen flex 
+}
+
+.main-container-wrapper{
+    @apply bg-white w-full sm:w-1/2 overflow-y-scroll scrollbar-hide
+}
+
+.input-field{
+    @apply w-full border rounded-xl p-3  text-sm font-normal 
+}
+
+.auth-label{
+    @apply text-xs sm:text-sm
+}
+
+.footer-div{
+    @apply text-center text-xs lg:text-sm
+}
+
+.signup-btn{
+    @apply bg-ctmgreen text-white w-full border rounded-xl p-3
+}
