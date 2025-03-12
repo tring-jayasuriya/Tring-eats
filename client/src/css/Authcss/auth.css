@@ -37,5 +37,9 @@
 }
 
 .signup-btn{
-    @apply bg-ctmgreen text-white w-full border rounded-xl p-3
+    @apply bg-mango text-white w-full border rounded-xl p-3
+}
+
+.error-msg{
+    @apply text-xs text-red-500 font-medium
 }

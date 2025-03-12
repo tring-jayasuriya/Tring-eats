@@ -1,0 +1,9 @@
+
+
+.dashboard-items{
+    @apply  rounded-lg p-3 font-medium hover:bg-slate-100 cursor-pointer
+}
+
+.isActive{
+    @apply bg-mango text-white hover:bg-mango cursor-pointer
+}

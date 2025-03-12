@@ -1,0 +1,67 @@
+.subtitle{
+    @apply font-semibold text-base
+}
+
+.view-all{
+    @apply text-mango  cursor-pointer
+}
+
+.small-cards{
+    @apply h-28 w-28 bg-white rounded-xl space-y-3 flex flex-col items-center justify-center text-base text-gray-400 
+}
+
+.category-img{
+    @apply w-12
+}
+
+.card{
+    @apply h-36 w-36 bg-white rounded-xl text-sm flex flex-col justify-center items-center gap-y-3
+}
+
+.big-card{
+    @apply h-28 bg-white rounded-xl text-sm flex  gap-x-5 justify-between items-center px-2
+}
+
+.dish-image{
+    @apply w-[75%] h-[50%] 
+}
+
+.price{
+    @apply font-semibold
+}
+
+.sidebar{
+    @apply w-[25%] text-center pt-6
+}
+
+.common{
+    @apply bg-litMango w-[75%]
+}
+
+.arrow{
+    @apply cursor-pointer hover:text-mango
+}
+
+.cover-image{
+    background-image: url('../assets/auth-images/cover-image.png');
+}
+
+.cover-title{
+    @apply  text-6xl font-medium
+}
+
+.cover-btn{
+    @apply rounded-full px-6 py-2 border text-base  font-medium 
+}
+
+.selected-btn{
+    @apply bg-mango text-white
+}
+
+.not-btn{
+    @apply bg-transparent text-black border-2 border-gray-600
+}
+
+.logout{
+    @apply  text-white rounded-lg px-4 py-2 font-medium
+}
