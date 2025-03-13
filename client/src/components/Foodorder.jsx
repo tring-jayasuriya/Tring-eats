@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import '../css/global.css'
 import { RiDeleteBinLine } from "react-icons/ri";
-import { Dishes } from '../category-data/dishes-data';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_FROM_CART } from '../graphql/queries/restaurantQuery';
 import { CONFIRM_ORDER, DELETE_ITEM } from '../graphql/mutation/restaurantMutation';
 import { toast } from 'react-toastify';
 import { getLocalStorage } from './common/GetLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 const Foodorder = () => {
 
@@ -16,6 +16,7 @@ const Foodorder = () => {
     const [deleteItem]=useMutation(DELETE_ITEM,{fetchPolicy:"no-cache"})
     const [confirmOrder]=useMutation(CONFIRM_ORDER,{fetchPolicy:"no-cache"})
     const [cartItem,setCartItem]=useState([])
+    const navigate=useNavigate()
   
 
     const [total,setTotal]=useState(0)
@@ -64,17 +65,16 @@ const Foodorder = () => {
             
             const{data}=await confirmOrder({variables:{user_id:userId, total_price:total,orderItems:orderItems }}) 
 
-            toast.success("order placed successfull wait for confirmation")
+            toast.success("order placed successfully wait for confirmation")
 
-            console.log(">>>>>>>",data?.confirmOrder);
-            
+            setTimeout(()=>{
+              navigate("/home?type=history")
+            },1500)            
 
         }catch(err){
             console.log("err from confirm order foodorder ",err);
-            
         }
       
-
     }
 
     console.log(cartItem);

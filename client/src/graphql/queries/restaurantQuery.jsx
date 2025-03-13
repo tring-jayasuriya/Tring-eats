@@ -85,6 +85,8 @@ export const ORDER_DETAILS=gql`
             product_id
             total_price
             quantity
+            payment_status
+            address
         }
     }
 `
@@ -115,6 +117,18 @@ export const GET_ORDER_HISTORY=gql`
             product_id
             total_price
             quantity
+            restaurant_id
+            restaurant_name
+            payment_status
         }
     }
 `
+
+export const TOTAL_PAGE=gql`
+    query getTotalPage($name:String){
+         getTotalPage(name:$name){
+            totalPage
+        }
+    }
+` 
+

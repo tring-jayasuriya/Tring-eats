@@ -1,16 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../css/global.css'
 import { getPageUrl } from './common/GetPage'
-import { GET_REST } from '../graphql/queries/restaurantQuery'
+import { GET_REST, TOTAL_PAGE } from '../graphql/queries/restaurantQuery'
 import { useQuery } from '@apollo/client'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import { ArrowComponent } from './ArrowComponent'
 
 const PopularRestaurant = () => {
 
         const navigate=useNavigate()
 
         const page=getPageUrl()
+
+        const [totalPageCount,setTotalPageCount]=useState(1)
+        
+            const {data:TotalPageCount,loading : PageCountLoading,error:pageCountError}=useQuery(TOTAL_PAGE,{
+                variables:{name:"products"}
+            })
     
         const {data,loading,error}=useQuery(GET_REST,{
             variables:{page:page},
@@ -51,11 +58,7 @@ const PopularRestaurant = () => {
             ))}
         </div>
 
-        <div className='flex justify-center items-center space-x-8  text-lg'>
-            <FaArrowLeft onClick={()=>handlePage(page-1)} className='arrow'/>
-            <p>{page}</p>
-            <FaArrowRight onClick={()=>handlePage(page+1)} className='arrow' />
-        </div>
+        <ArrowComponent name={"restaurant"} page={page} />
         
     </div>
   )

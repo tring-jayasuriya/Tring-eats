@@ -44,7 +44,6 @@ const Router=()=>{
                         <RestaurantDashboard/>
                     </RestaurantProtectedRoute>
                     }/>
-                
             </Route>
 
         </Routes>

@@ -1,5 +1,7 @@
 const { Query } = require("pg")
 const { pool } = require("../../db/config")
+const generateToken = require("../../utils/generateJwtToken")
+const setCookie = require("../../utils/setCookie")
 
 
 
@@ -36,23 +38,39 @@ const userResolver={
     },
 
     Query:{
-        getUser:async(_,{email,password})=>{
+        getUser:async(_,{email,password},{res})=>{
             console.log("log from get user");
             
             try{
-                const res=await pool.query(
+                const response=await pool.query(
                     "SELECT name, id,email ,password from users where email=$1",
                     [email]
                 )
+
                 
 
-                if(res.rowCount===0)  return {emailError:true}
+                if(response.rowCount===0)  return {emailError:true}
             
-                const checkPassword=res.rows[0].password
+                const checkPassword=response.rows[0].password
 
                 if(checkPassword!==password) return {passwordError:true}
+
+                const user={
+                    id:response.rows[0].id,
+                    role:"user"
+                }
+
+                const token=generateToken(user)
+
+                console.log(token);
+
+                setCookie(token,res)
                 
-                return {...res.rows[0],isAuthenticated:true}
+
+                console.log(response.rows[0]);
+                
+                
+                return {...response.rows[0],isAuthenticated:true}
 
             }catch(err){
                 console.log("log from get user error",err);

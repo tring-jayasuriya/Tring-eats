@@ -17,7 +17,7 @@ const restaurantDefs=gql`
         id:Int!,
         name:String!
         price:String!
-        image:String!
+        image:String
         restaurant_id:Int!
         restaurant_name:String!
         isavailable:Boolean
@@ -45,6 +45,8 @@ const restaurantDefs=gql`
         quantity: Int
         total_price: Float
         order_status: String
+        payment_status:String
+        address:String
     }
     
     type OrderResponse{
@@ -61,6 +63,10 @@ const restaurantDefs=gql`
         product_id:Int!
         quantity:Int!
     }
+
+    type TotalPage{
+        totalPage:Int!
+    }
   
     type Query{
         getRestaurant(email:String!,password:String!):Restaurant
@@ -72,6 +78,7 @@ const restaurantDefs=gql`
         orderDetails(id:Int!):[MyOrderResponse]
         searchDish(name:String!,page:Int!):[Dish]
         getOrderHistory(id:Int!):[MyOrderResponse]
+        getTotalPage(name:String):TotalPage
     }
  
 
@@ -82,7 +89,9 @@ const restaurantDefs=gql`
         confirmOrder(user_id:Int!, total_price:Float!, orderItems:[OrderItem]!):OrderResponse
         updateRestaurantStatus(id:Int!,isopen:Boolean!):StatusResponse
         orderStatus(orderId:Int!,orderStatus:String!):String
+        updateMenu(name:String!,price:Float!,image:String,id:Int!):String
+        addMenu(name:String!,price:Float!,image:String,restaurantId:Int!):String
+        deleteMenu(productId:Int!):String
     }
 `
-
 module.exports=restaurantDefs

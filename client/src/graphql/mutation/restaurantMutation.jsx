@@ -49,3 +49,20 @@ export const ORDER_STATUS=gql`
     }
 `
 
+export const ADD_MENU=gql`
+    mutation addMenu($name:String!,$price:Float!,$image:String,$restaurantId:Int!){
+        addMenu(name:$name,price:$price,image:$image,restaurantId:$restaurantId)
+    }
+`
+
+export const UPDATE_MENU=gql`
+    mutation updateMenu($name:String!,$price:Float!,$image:String,$id:Int!){
+        updateMenu(name:$name,price:$price,image:$image,id:$id)
+    }
+`
+
+export const DELETE_MENU=gql`
+    mutation deleteMenu($productId:Int!){
+        deleteMenu(productId:$productId)
+    }
+`

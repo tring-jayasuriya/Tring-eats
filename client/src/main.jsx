@@ -9,12 +9,11 @@ import { Client } from './apollo/apolloClient.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-
     <ApolloProvider client={Client}>
       <BrowserRouter>
         <Router/>
       </BrowserRouter>
     </ApolloProvider>
-    
+
   </StrictMode>
 )

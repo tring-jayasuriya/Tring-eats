@@ -11,7 +11,7 @@ dotenv.config()
 const app=express()
 
 app.use(cors({
-    origin:process.env.CLIENT_URL,
+    origin:[process.env.CLIENT_URL],
     credentials:true
 }))
 
@@ -24,6 +24,8 @@ const startServer=async()=>{
         const server=new ApolloServer({
             typeDefs,
             resolvers,
+            introspection: true,
+            playground: true,
             context:({req,res})=>({req,res})
         
         })

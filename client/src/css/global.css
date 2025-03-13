@@ -39,7 +39,7 @@
 }
 
 .arrow{
-    @apply cursor-pointer hover:text-mango
+    @apply cursor-pointer hover:text-mango text-xl
 }
 
 .cover-image{
@@ -64,4 +64,25 @@
 
 .logout{
     @apply  text-white rounded-lg px-4 py-2 font-medium
+}
+
+.edit-btn{
+    @apply text-xl  mr-5 cursor-pointer
+}
+
+.success{
+    @apply text-green-600  border-green-600
+}
+
+.pending{
+    @apply text-yellow-500 border-yellow-500
+}
+
+.cancel{
+    @apply text-red-500 border-red-500
+}
+
+.common-status-btn{
+    @apply border  rounded-lg py-0.5 px-1 text-xs
+
 }

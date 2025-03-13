@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { GET_ORDER_HISTORY } from '../graphql/queries/restaurantQuery'
 import { getLocalStorage } from './common/GetLocalStorage'
 import _ from 'lodash'
+import { HistoryTable } from './HistoryTable'
 
 const OrderHistory = () => {
 
@@ -28,40 +29,47 @@ const OrderHistory = () => {
   
 
   return (
-    <div>
-      <p>OrderHistory</p>
+    // <div>
+    //   <p>OrderHistory</p>
 
-      <div className='flex flex-wrap gap-3 p-5'>
-      {
-        groupedOrder!==null && 
-        Object.entries(groupedOrder).map(([OrderId,OrderItems],index)=>(
-            <div className=' bg-white mx-auto p-2 rounded space-y-2  '>
-              <div className='pt-2'>
-                <p>Order Id : {OrderId}</p>
-                {
-                  OrderItems.map((items,index)=>(
-                    <div className='flex gap-x-4 '>
+    //   <div className='flex flex-wrap gap-3 p-5'>
+    //   {
+    //     groupedOrder!==null && 
+    //     Object.entries(groupedOrder).map(([OrderId,OrderItems],index)=>(
+    //         <div className=' bg-white mx-auto p-2 rounded space-y-2  '>
+    //           <div className='pt-2'>
+    //             <p>Order Id : {OrderId}</p>
+    //             {
+    //               OrderItems.map((items,index)=>(
+    //                 <div className='flex gap-x-4 '>
 
-                      <p>{items.product_name}</p>
-                      <p>x</p>
-                      <p>{items.quantity}</p>
-                      {/* <p>{items.order_status}</p> */}
-                    </div>
-                  ))
-                }
+    //                   <p>{items.product_name}</p>
+    //                   <p>x</p>
+    //                   <p>{items.quantity}</p>
+    //                   {/* <p>{items.order_status}</p> */}
+    //                 </div>
+    //               ))
+    //             }
 
                 
-              </div>
+    //           </div>
 
              
-            </div>    
+    //         </div>    
 
-        ))
-      }
+    //     ))
+    //   }
       
-    </div>
+    // </div>
 
 
+    // </div>
+    
+
+    <div className='space-y-4'>
+      <p className='font-medium'>Order summary</p>
+     { data?.getOrderHistory &&
+      <HistoryTable groupedOrder={groupedOrder}/>}
     </div>
   )
 }

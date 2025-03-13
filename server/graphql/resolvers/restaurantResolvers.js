@@ -88,6 +88,11 @@ const restaurantResolver={
                     [item]
                 )
 
+                await pool.query(
+                    `delete from cart where user_id=$1`,
+                    [user_id]
+                )
+
                 const restaurant_id=response.rows[0].restaurant_id
 
                 const res=await pool.query(
@@ -146,6 +151,60 @@ const restaurantResolver={
 
             }catch(err){
                 console.log("error from order status resolver",err);
+            }
+        },
+
+        updateMenu : async(_,{name,price,image,id})=>{
+            try{
+
+                const response=await pool.query(
+                    `update products set name=$1 , price=$2 , image=$3 where id=$4 `,
+                    [name,price,image,id]
+                )
+
+                return "product update successfull"
+
+
+            }catch(err){
+
+                console.log("log from update menu",err)
+                throw new Error(err)
+                
+            }
+        },
+
+        addMenu: async(_,{name,price,image,restaurantId})=>{
+
+            try{
+                const response=await pool.query(
+                    `insert into products(name,price,image,restaurant_id) values ($1,$2,$3,$4)`,
+                    [name,price,image,restaurantId]
+                )
+
+                return "product created successfully"
+
+            }catch(err){
+                console.log("log from add menu ",err);
+                throw new Error(err)
+            }
+        },
+
+        deleteMenu: async(_,{productId})=>{
+
+            try{
+
+                const response=await pool.query(
+                    `delete from products where id=$1`,
+                    [productId]
+                )
+
+                return "product deleted successfully"
+
+            }catch(err){
+
+                console.log("error from delete menu",err);
+                throw new Error(err);
+
             }
         }
 
@@ -251,7 +310,7 @@ const restaurantResolver={
                     [id]
                 )
 
-                console.log(res.rows[0]);
+                console.log("restaurant menu",res.rows);
                 
                 return res.rows
 
@@ -285,7 +344,7 @@ const restaurantResolver={
             try{
                 const res=await pool.query(
                     `SELECT o.order_id, u.id AS user_id, u.name AS user_name,p.id AS product_id, p.name AS product_name,
-                    oi.quantity, (oi.quantity * p.price) AS total_price, o.order_status, o.total_price
+                    oi.quantity, (oi.quantity * p.price) AS total_price, o.order_status, o.total_price,o.payment_status,u.address
                     FROM orders o JOIN users u ON o.user_id = u.id
                     JOIN restaurant r ON o.restaurant_id = r.id
                     JOIN orderItems oi ON oi.order_id = o.order_id
@@ -332,14 +391,14 @@ const restaurantResolver={
                     `
                     SELECT o.order_id, r.id AS restaurant_id, r.name AS restaurant_name, u.id AS user_id, 
                     u.name AS user_name, p.id AS product_id, p.name AS product_name, oi.quantity, 
-                    (oi.quantity * p.price) AS total_price, o.order_status
+                    (oi.quantity * p.price) AS total_price, o.order_status, o.payment_status
                     FROM orders o
                     JOIN users u ON o.user_id = u.id
                     JOIN restaurant r ON o.restaurant_id = r.id
                     JOIN orderItems oi ON oi.order_id = o.order_id
                     JOIN products p ON oi.product_id = p.id
                     WHERE u.id = $1 
-                    ORDER BY o.order_id
+                    ORDER BY o.order_id desc limit 20 
                     `,
                     [id]
                 );
@@ -347,6 +406,27 @@ const restaurantResolver={
                 
             }catch(err){
                 console.log("error from get order history",err)
+            }
+
+        },
+
+        getTotalPage: async(_,{name})=>{
+
+            console.log(name);
+            
+
+            try{
+
+                const response=await pool.query(
+                    `select count(*) from ${name}`,
+                )
+
+                return {totalPage:response.rows[0].count}
+                
+
+            }catch(err){
+                console.log("error from get total page resolver");
+                throw new Error(err)
             }
 
         }

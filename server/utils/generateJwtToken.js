@@ -8,4 +8,4 @@ const generateToken=(user)=>{
     return token
 }
 
-module.exports=token
+module.exports=generateToken
