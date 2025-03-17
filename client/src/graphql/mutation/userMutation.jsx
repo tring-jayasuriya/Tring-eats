@@ -8,3 +8,9 @@ export const CREATE_USER=gql`
         }
     }   
 ` 
+
+export const UPDATE_USER_DETAILS=gql`
+    mutation updataUser($name:String!,$email:String!,$city:String,$address:String){
+        updateUser(name:$name,email:$email,city:$city,address:$address)
+    }
+`

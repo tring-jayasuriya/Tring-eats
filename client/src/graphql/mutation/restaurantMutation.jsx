@@ -66,3 +66,11 @@ export const DELETE_MENU=gql`
         deleteMenu(productId:$productId)
     }
 `
+
+export const IS_RESTAURANT_OPEN=gql`
+    mutation isRestaurantOpen($id:Int!){
+        isRestaurantOpen(id:$id){
+            isopen
+        }
+    }
+`

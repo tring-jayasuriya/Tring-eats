@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {useForm} from "react-hook-form"
 import {useLocation, useNavigate} from 'react-router-dom'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import SideImage from '../../assets/auth-images/auth-side-image.png'
 
@@ -12,6 +13,8 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_USER } from '../../graphql/queries/userQuery';
 import { GET_RESTAURANT } from '../../graphql/queries/restaurantQuery'
 import { toast } from 'react-toastify'
+import EyeButton from '../EyeButton'
+import { ShowEyeIcon } from '../ShowEyeIcon'
 
 
 export const Login = () => {
@@ -23,6 +26,7 @@ export const Login = () => {
 
     const [passwordError,setPasswordError]=useState(false)
     const [emailError,setEmailError]=useState(false)
+    const [showPassword,setShowPassword]=useState(false)
     
     const navigate=useNavigate()
 
@@ -39,12 +43,6 @@ export const Login = () => {
     }=useForm()
     
     const [getData,{data,loading,error}]=useLazyQuery(path,{fetchPolicy:"no-cache"})
-
-    console.log(path);
-    console.log(">>>>>>>>>>>>>>>.",GET_RESTAURANT);
-    
-    
-
 
 
     const handleSignUp=()=>{
@@ -90,7 +88,7 @@ export const Login = () => {
                 name:data.getData.name
             }
             localStorage.setItem(componentName,JSON.stringify(localData))
-            toast.success("login successfull")
+            toast.success(`welcome back ${localData.name}`)
             componentName==="user"? navigate("/home?type=dashboard") : navigate("/restaurant")
         }
 
@@ -130,21 +128,25 @@ export const Login = () => {
                                 }
                             </div>
 
-                            <div className='space-y-2'>
+                            <div className='space-y-2 relative'>
                                 <p className='auth-label'>Password</p>
                                 <input
                                     className='input-field'
-                                    type='password'
+                                    type={ showPassword? 'text' : 'password'} 
                                     placeholder='Enter your password'
                                     {...register("password",{
                                         required:"password is empty",
                                     })}
                                 />
+
+                                {showPassword ?  <EyeButton setShowPassword={setShowPassword} /> : <ShowEyeIcon setShowPassword={setShowPassword} />}
+
+                                
                                 {errors.password && <p className="error-msg">{errors.password.message}</p> ||
                                  passwordError && <p className="error-msg">Incorrect password</p> }
                             </div>
 
-                              <div className='flex items-center space-x-2'>
+                            {/* <div className='flex items-center space-x-2'>
                                                             
                                 <div onClick={()=>setPolicyCheck((prev)=>!prev)}>
                                 {policyCheck? < IoIosCheckbox/>: <MdOutlineCheckBoxOutlineBlank/>}
@@ -152,10 +154,10 @@ export const Login = () => {
 
                                 <p className='text-xs'>Remeber for 3 days </p>
 
-                            </div>
+                            </div> */}
 
                             
-                            <button className='signup-btn' type='submit'>signin</button>
+                            <button disabled={loading} className='signup-btn ' type='submit'>{loading?  <AiOutlineLoading3Quarters className='mx-auto  animate-spin'/> :"signin"}</button>
 
                             <p className='footer-div'>OR</p>
 

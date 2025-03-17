@@ -12,10 +12,15 @@ import SideImage from '../assets/auth-images/auth-side-image.png'
 import { useMutation } from '@apollo/client';
 import { CREATE_RESTAURANT } from '../graphql/mutation/restaurantMutation';
 import { toast } from 'react-toastify';
+import EyeButton from '../components/EyeButton';
+import { ShowEyeIcon } from '../components/ShowEyeIcon';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export const RestaurantSignUp = () => {
 
     const [policyCheck,setPolicyCheck]=useState(false)
+    const [showPassword,setShowPassword]=useState(false)
+    const [showConfirmPassword,setShowConfirmPassword]=useState(false)
 
     const {
         register,
@@ -41,7 +46,7 @@ export const RestaurantSignUp = () => {
             navigate("/login?tag=restaurant")
             
         }catch(err){
-            toast.error(err.message)
+        toast.error(err.message)
             console.log("error from handle registration",err);
         }
         
@@ -123,11 +128,11 @@ export const RestaurantSignUp = () => {
                                 {errors.email && <p className="error-msg">{errors.email.message}</p>}
                             </div>
 
-                            <div className='space-y-2'>
+                            <div className='space-y-2 relative'>
                                 <p className='auth-label'>Password</p>
                                 <input
                                     className='input-field'
-                                    type='password'
+                                    type={ showPassword? 'text' : 'password'}
                                     placeholder='Enter your password'
                                     {...register("password",{
                                         required:"password is empty",
@@ -137,20 +142,26 @@ export const RestaurantSignUp = () => {
                                         }
                                     })}
                                     />
+
+                                    {showPassword ?  <EyeButton setShowPassword={setShowPassword} /> : <ShowEyeIcon setShowPassword={setShowPassword} />}
+
                                     {errors.password && <p className="error-msg">{errors.password.message}</p>}
                             </div>
 
-                            <div className='space-y-2'>
+                            <div className='space-y-2 relative'>
                                 <p className='auth-label'>Confirm password</p>
                                 <input
                                     className='input-field'
-                                    type='password'
+                                    type={ showConfirmPassword? 'text' : 'password'}
                                     placeholder='Enter confirm password'
                                     {...register("confirmPassword",{
                                         required:"confirm password is empty",
                                         validate:(data)=> data===watch("password") || "confirm password does not match password"
                                     })}
                                 />
+
+                                {showConfirmPassword ?  <EyeButton setShowPassword={setShowConfirmPassword} /> : <ShowEyeIcon setShowPassword={setShowConfirmPassword} />}
+
                                 {errors.confirmPassword && <p className="error-msg">{errors.confirmPassword.message}</p>}
                             </div>
 
@@ -165,7 +176,7 @@ export const RestaurantSignUp = () => {
                             </div>
 
                             
-                            <button type='submit'  className='signup-btn'>signup</button>
+                            <button disabled={loading} type='submit'  className='signup-btn'>{loading?  <AiOutlineLoading3Quarters className='mx-auto  animate-spin'/> :"signin"}</button>
 
                             <p className='footer-div'>OR</p>
 

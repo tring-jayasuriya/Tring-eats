@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import DishPopUp from './DishPopUp'
 
-const DishGrid = ({items}) => {
+const DishGrid = ({items,page}) => {
 
     const [isDishClicked, setIsDishClicked]=useState(false)
     const [popupData,setPopupData]=useState({})
@@ -37,7 +37,7 @@ const DishGrid = ({items}) => {
 
         <div className='flex justify-center items-center space-x-8 mt-10 text-lg'>
             <FaArrowLeft onClick={()=>handlePage(page-1)} className='arrow'/>
-            {/* <p>{page}</p> */}
+            <p>{page}</p>
             <FaArrowRight onClick={()=>handlePage(page+1)} className='arrow' />
         </div>
 

@@ -26,8 +26,6 @@ const Main = () => {
 
     const navigate=useNavigate()
 
-    const user=getLocalStorage("user")
-
 
     const componentList={
         dashboard:Dashboard,
@@ -38,10 +36,7 @@ const Main = () => {
 
     const CurrentComponent=componentList[componentName] 
 
-    const handleLogOut=()=>{
-        deleteLocalStorage("user")
-        navigate("/login")
-    }
+
 
     useEffect(()=>{
         if("geolocation" in navigator){
@@ -56,21 +51,26 @@ const Main = () => {
         }
     },[])
 
-    const handleSearch=(e)=>{
-        console.log(e.target.value);
-        setSearch(e.target.value)
-    }
+    useEffect(()=>{
 
-    const handleKeyDown=(e)=>{
-        if(e.key==="Enter"){
-            navigate("/home/search?page=1",{state:{search:search}})
+        const fetchLocation=async()=>{
+            if(myLocation.latitude!==''){
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${myLocation.latitude}&lon=${myLocation.longitude}&format=json`);
+                const data=response.json()
+                console.log(data);
+            }
         }
-    }
+
+        fetchLocation()
+       
+
+    },[myLocation])
+
 
     console.log(myLocation);
 
   return (
-    <div className='w-[75%] bg-litMango p-10 pt-6 '>
+    <div className=' md:w-[75%] bg-litMango p-10 pt-6 '>
         <Header/>
         <CurrentComponent/>
     </div>

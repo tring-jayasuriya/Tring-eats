@@ -4,23 +4,39 @@ import { GET_ORDER_HISTORY } from '../graphql/queries/restaurantQuery'
 import { getLocalStorage } from './common/GetLocalStorage'
 import _ from 'lodash'
 import { HistoryTable } from './HistoryTable'
+import { getPageUrl } from './common/GetPage'
+import { ArrowComponent } from './ArrowComponent'
 
 const OrderHistory = () => {
 
   const id=getLocalStorage("user").id 
+  const page=getPageUrl()
 
-  const {data,refetch}=useQuery(GET_ORDER_HISTORY,{fetchPolicy:"no-cache",variables:{id:id}})
-  const [groupedOrder,setGroupedOrder]=useState(null)
+  console.log("?>> page",page);
+  
+
+  const {data,refetch}=useQuery(GET_ORDER_HISTORY,{fetchPolicy:"no-cache",variables:{id:id,page:page}})
+  const [groupedOrder,setGroupedOrder]=useState([])
 
 
     useEffect(()=>{
       if(data?.getOrderHistory){
-        console.log(">>>>");
-        
         const GroupedOrder=_.groupBy(data.getOrderHistory,"order_id")
-        setGroupedOrder(GroupedOrder)
+
+        const sortedGroupedOrder = Object.entries(GroupedOrder)
+        .sort(([a], [b]) => Number(b) - Number(a))
+        .map(([order_id, orders]) => ({ order_id: Number(order_id), orders }));
+
+
+        console.log(">>>> sorted grouped order", sortedGroupedOrder);
+
+        console.log("grouped order", GroupedOrder);
         
+        
+        setGroupedOrder(sortedGroupedOrder)
+       
       }
+      refetch()
   
     },[data])
 
@@ -29,47 +45,12 @@ const OrderHistory = () => {
   
 
   return (
-    // <div>
-    //   <p>OrderHistory</p>
 
-    //   <div className='flex flex-wrap gap-3 p-5'>
-    //   {
-    //     groupedOrder!==null && 
-    //     Object.entries(groupedOrder).map(([OrderId,OrderItems],index)=>(
-    //         <div className=' bg-white mx-auto p-2 rounded space-y-2  '>
-    //           <div className='pt-2'>
-    //             <p>Order Id : {OrderId}</p>
-    //             {
-    //               OrderItems.map((items,index)=>(
-    //                 <div className='flex gap-x-4 '>
-
-    //                   <p>{items.product_name}</p>
-    //                   <p>x</p>
-    //                   <p>{items.quantity}</p>
-    //                   {/* <p>{items.order_status}</p> */}
-    //                 </div>
-    //               ))
-    //             }
-
-                
-    //           </div>
-
-             
-    //         </div>    
-
-    //     ))
-    //   }
-      
-    // </div>
-
-
-    // </div>
-    
-
-    <div className='space-y-4'>
+    <div className='w-full space-y-4'>
       <p className='font-medium'>Order summary</p>
      { data?.getOrderHistory &&
       <HistoryTable groupedOrder={groupedOrder}/>}
+      <ArrowComponent  name={"orders"} page={page}/>
     </div>
   )
 }

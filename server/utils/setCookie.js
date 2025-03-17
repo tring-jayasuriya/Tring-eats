@@ -6,7 +6,6 @@ const setCookie=(token,res)=>{
 
     res.cookie("jwttoken",token,{
         httpOnly:true,
-        // sameSite: "strict",
         maxAge: 24 * 7 * 60 * 60 * 1000
 
     })

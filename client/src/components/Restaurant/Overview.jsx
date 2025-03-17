@@ -67,8 +67,8 @@ const Overview = () => {
       {
          !editPopUp &&  
 
-         <div>
-          <p className='text-3xl text-center font-semibold'>Restaurant Dashboard</p>
+         <div className='space-y-4'>
+          <p className='text-3xl text-center font-semibold '>Restaurant Dashboard</p>
 
           <div className='flex bg-white w-full p-2 rounded-lg justify-between items-center'>
 

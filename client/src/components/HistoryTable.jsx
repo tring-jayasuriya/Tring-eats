@@ -15,8 +15,7 @@ export const HistoryTable = ({groupedOrder}) => {
      <div className='flex flex-col gap-y-2 text-sm'> 
 
         <div className='flex justify-between bg-white px-4 py-2 rounded-md font-medium '>
-            {/* <p>Id</p> */}
-            <p>Restaurant name</p>
+            <p className='w-40'>Restaurant name</p>
             <p>Order status</p>
             <p>Payment status</p>
             <p>Price</p>
@@ -25,16 +24,15 @@ export const HistoryTable = ({groupedOrder}) => {
 
             {
                 groupedOrder!==null && 
-                Object.entries(groupedOrder).map(([OrderId,OrderItems],index)=>{
-                        const orderDetails=OrderItems[0]
+                groupedOrder.map(({ order_id, orders},index)=>{
+                        const orderDetails=orders[0]
                         return(
-                                <div className='flex justify-between items-start bg-white px-4 py-2 rounded-md text-left '>
-                                    {/* <p>{orderDetails?.order_id}</p> */}
+                                <div className='flex justify-between items-start bg-white px-4 py-2 rounded-md text-left' key={order_id}>
                                     <p className='w-40'>{orderDetails?.restaurant_name}</p>
                                     <p className={`w-15 ${orderDetails?.order_status==='success'?'success': orderDetails?.order_status==='pending'?'pending': 'cancel' } common-status-btn`} >{orderDetails?.order_status}</p>
                                     <p className={`w-15 ${orderDetails?.payment_status==='paid'?'success':'cancel' } common-status-btn`}>{orderDetails?.payment_status}</p>
                                     <p>${orderDetails?.total_price}</p>
-                                    <p onClick={()=>handlePopup(OrderItems)} className='cursor-pointer'>view</p>
+                                    <p onClick={()=>handlePopup(orders)} className='cursor-pointer'>view</p>
                                 </div>
                         )
                     })

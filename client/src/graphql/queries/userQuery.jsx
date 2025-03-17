@@ -13,3 +13,14 @@ export const GET_USER=gql`
         }
     }
 `
+
+export const GET_PROFILE_DETAILS=gql`
+    query getProfileDetails($id:Int!){
+        getProfileDetails(id:$id){
+            name
+            email
+            address
+            city
+        }
+    }
+`

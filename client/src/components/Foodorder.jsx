@@ -3,7 +3,7 @@ import '../css/global.css'
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_FROM_CART } from '../graphql/queries/restaurantQuery';
-import { CONFIRM_ORDER, DELETE_ITEM } from '../graphql/mutation/restaurantMutation';
+import { CONFIRM_ORDER, DELETE_ITEM, IS_RESTAURANT_OPEN } from '../graphql/mutation/restaurantMutation';
 import { toast } from 'react-toastify';
 import { getLocalStorage } from './common/GetLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ const Foodorder = () => {
     const {data,loading,error}=useQuery(GET_FROM_CART,{fetchPolicy:"no-cache", variables:{id:userId}})
     const [deleteItem]=useMutation(DELETE_ITEM,{fetchPolicy:"no-cache"})
     const [confirmOrder]=useMutation(CONFIRM_ORDER,{fetchPolicy:"no-cache"})
+    const [isRestaurantOpen]=useMutation(IS_RESTAURANT_OPEN,{fetchPolicy:"no-cache"})
     const [cartItem,setCartItem]=useState([])
     const navigate=useNavigate()
   
@@ -56,11 +57,25 @@ const Foodorder = () => {
       setCartItem(dupCart)
     }
 
+    console.log(">>>>cart item ",cartItem);
+
     const handleConfirmOrder=async()=>{
 
         try{
+
+            const {data:isopen}=await isRestaurantOpen({variables:{id:cartItem[0].restaurant_id}})
+
+            if(!isopen.isRestaurantOpen.isopen){
+              toast.error("can't order food. Restaurant currently closed")
+              return
+            }
+              
+            
+          
             const orderItems= cartItem.map(({ id,quantity})=>({ product_id:parseInt(id),quantity}))
             console.log(">>>>>>",orderItems);
+
+            
             
             
             const{data}=await confirmOrder({variables:{user_id:userId, total_price:total,orderItems:orderItems }}) 

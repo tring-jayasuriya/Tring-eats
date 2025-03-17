@@ -1,18 +1,18 @@
 import { gql } from "@apollo/client";
 
-
-export const GET_RESTAURANT=gql`
-    query getRestaurant($email:String!,$password:String!){
-        getData:getRestaurant(email:$email,password:$password){
-            name
-            email
-            id
-            emailError
-            passwordError
-            isAuthenticated
-        }
+export const GET_RESTAURANT = gql`
+  query getRestaurant($email: String!, $password: String!) {
+    getData: getRestaurant(email: $email, password: $password) {
+      name
+      email
+      id
+      emailError
+      passwordError
+      isAuthenticated
+      isopen
     }
-`
+  }
+`;
 
 export const GET_DISHES = gql`
   query getDishes($page: Int!) {
@@ -25,7 +25,7 @@ export const GET_DISHES = gql`
       restaurant_name
     }
   }
-`
+`;
 
 export const GET_REST = gql`
   query getRest($page: Int!) {
@@ -34,101 +34,124 @@ export const GET_REST = gql`
       image
       city
       id
+      isopen
     }
   }
-`
+`;
 
+export const GET_FROM_CART = gql`
+  query getCartItems($id: Int!) {
+    getCartItems(id: $id) {
+      name
+      image
+      price
+      restaurant_id
+      restaurant_name
+      id
+    }
+  }
+`;
 
-export const GET_FROM_CART=gql`
-    query getCartItems($id:Int!){
-        getCartItems(id:$id){
+export const GET_MENU = gql`
+  query getMenu($id: Int!) {
+    getMenu(id: $id) {
+      name
+      price
+      id
+      image
+      restaurant_id
+    }
+  }
+`;
+
+export const GET_STATUS = gql`
+  query getStatus($id: Int!) {
+    getStatus(id: $id) {
+      isopen
+    }
+  }
+`;
+
+export const ORDER_DETAILS = gql`
+  query orderDetails($id: Int!) {
+    orderDetails(id: $id) {
+      order_id
+      product_name
+      user_name
+      user_id
+      order_status
+      product_id
+      total_price
+      quantity
+      payment_status
+      address
+    }
+  }
+`;
+
+export const SEARCH_DISH = gql`
+  query searchDish($name: String!, $page: Int!) {
+    searchDish(name: $name, page: $page) {
+      id
+      name
+      price
+      restaurant_id
+      restaurant_name
+      image
+      totalPage
+    }
+  }
+`;
+
+export const GET_ORDER_HISTORY = gql`
+  query getOrderHistory($id: Int!,$page:Int!) {
+    getOrderHistory(id: $id,page:$page) {
+      order_id
+      product_name
+      user_name
+      user_id
+      order_status
+      product_id
+      total_price
+      quantity
+      restaurant_id
+      restaurant_name
+      payment_status
+    }
+  }
+`;
+
+export const TOTAL_PAGE = gql`
+  query getTotalPage($name: String!) {
+    getTotalPage(name: $name) {
+      totalPage
+    }
+  }
+`;
+
+export const GET_RANDOM_DISH = gql`
+    query getRandomDish($name:String!){
+            getRandomDish(name:$name){
+            id
             name
-            image
             price
+            image
             restaurant_id
             restaurant_name
-            id
+            isavailable
         }
-    
     }
-`
+`;
 
-export const GET_MENU=gql`
-    query getMenu($id:Int!){
-        getMenu(id:$id){
+export const GET_RANDOM_RESTAURANT=gql`
+    query getRandomRestaurant($name:String!){
+        getRandomRestaurant(name:$name){
+            id
             name
-            price
-            id
+            city
+            address
             image
-            restaurant_id
-        }
-    }
-`
-
-export const GET_STATUS=gql`
-    query getStatus($id:Int!){
-        getStatus(id:$id){
             isopen
         }
     }
 `
-
-
-export const ORDER_DETAILS=gql`
-    query orderDetails($id:Int!){
-        orderDetails(id:$id){
-            order_id
-            product_name
-            user_name
-            user_id
-            order_status
-            product_id
-            total_price
-            quantity
-            payment_status
-            address
-        }
-    }
-`
-
-
-export const SEARCH_DISH=gql`
-    query searchDish($name:String!,$page:Int!){
-        searchDish(name:$name,page:$page){
-            id
-            name
-            price
-            restaurant_id
-            restaurant_name
-            image
-        }
-    }
-`
-
-
-export const GET_ORDER_HISTORY=gql`
-    query getOrderHistory($id:Int!){
-        getOrderHistory(id:$id){
-            order_id
-            product_name
-            user_name
-            user_id
-            order_status
-            product_id
-            total_price
-            quantity
-            restaurant_id
-            restaurant_name
-            payment_status
-        }
-    }
-`
-
-export const TOTAL_PAGE=gql`
-    query getTotalPage($name:String){
-         getTotalPage(name:$name){
-            totalPage
-        }
-    }
-` 
-

@@ -1,6 +1,7 @@
 const {gql}=require("apollo-server-express")
 
 const restaurantDefs=gql`
+
     type Restaurant{
         id:Int
         name:String
@@ -11,6 +12,7 @@ const restaurantDefs=gql`
         emailError:Boolean
         passwordError:Boolean
         isAuthenticated:Boolean
+        isopen:Boolean
     }
     
     type Dish{
@@ -18,9 +20,10 @@ const restaurantDefs=gql`
         name:String!
         price:String!
         image:String
-        restaurant_id:Int!
-        restaurant_name:String!
+        restaurant_id:Int
+        restaurant_name:String
         isavailable:Boolean
+        totalPage:Int
     }
 
     type CartResponse {
@@ -77,8 +80,10 @@ const restaurantDefs=gql`
         getStatus(id:Int!):StatusResponse
         orderDetails(id:Int!):[MyOrderResponse]
         searchDish(name:String!,page:Int!):[Dish]
-        getOrderHistory(id:Int!):[MyOrderResponse]
-        getTotalPage(name:String):TotalPage
+        getOrderHistory(id:Int!,page:Int!):[MyOrderResponse]
+        getTotalPage(name:String!):TotalPage
+        getRandomDish(name:String!):[Dish]
+        getRandomRestaurant(name:String!):[Restaurant]
     }
  
 
@@ -92,6 +97,7 @@ const restaurantDefs=gql`
         updateMenu(name:String!,price:Float!,image:String,id:Int!):String
         addMenu(name:String!,price:Float!,image:String,restaurantId:Int!):String
         deleteMenu(productId:Int!):String
+        isRestaurantOpen(id:Int!):Restaurant
     }
 `
 module.exports=restaurantDefs

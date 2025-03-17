@@ -206,6 +206,20 @@ const restaurantResolver={
                 throw new Error(err);
 
             }
+        },
+
+        isRestaurantOpen:async(_,{id})=>{
+            try{
+                const response=await pool.query(
+                    `select isopen from restaurant where id=$1`,
+                    [id]
+                )
+                return response.rows[0]
+
+            }catch(err){
+                console.log("error form isRestauurant open resolvee",err);
+                
+            }
         }
 
     },
@@ -262,7 +276,7 @@ const restaurantResolver={
                 console.log("log from get restuarant");
     
                 const res=await pool.query(
-                    `select * from restaurant limit 12 offset ${offset}`
+                    `select * from restaurant  limit 12 offset ${offset}`
                 )
                 
                 return res.rows
@@ -349,7 +363,7 @@ const restaurantResolver={
                     JOIN restaurant r ON o.restaurant_id = r.id
                     JOIN orderItems oi ON oi.order_id = o.order_id
                     JOIN products p ON oi.product_id = p.id WHERE r.id = $1 
-                    ORDER BY o.order_id;
+                    ORDER BY o.order_id desc
                      `,
                      [id]
                 )
@@ -375,6 +389,7 @@ const restaurantResolver={
                     [`%${name}%`,offset]
                 )
 
+
                 return res.rows
 
             }catch(err){
@@ -384,8 +399,11 @@ const restaurantResolver={
 
         },
 
-        getOrderHistory:async(_,{id})=>{
+        getOrderHistory:async(_,{id,page})=>{
             try{
+                const offset=(page-1)*12
+                console.log(page);
+                
                 
                 const res = await pool.query(
                     `
@@ -398,10 +416,13 @@ const restaurantResolver={
                     JOIN orderItems oi ON oi.order_id = o.order_id
                     JOIN products p ON oi.product_id = p.id
                     WHERE u.id = $1 
-                    ORDER BY o.order_id desc limit 20 
+                    ORDER BY o.order_id desc limit 12 offset $2
                     `,
-                    [id]
+                    [id,page]
                 );
+
+                console.log(res.rows);
+                
                 return res.rows
                 
             }catch(err){
@@ -429,7 +450,44 @@ const restaurantResolver={
                 throw new Error(err)
             }
 
+        },
+
+        getRandomDish: async(_,{name})=>{
+
+            try{
+
+                const response=await pool.query(
+                    `select p.* , r.name as restaurant_name from ${name} p 
+                    join restaurant r on p.restaurant_id=r.id 
+                    order by random() limit 6`
+                )   
+
+                return response.rows
+
+            }catch(err){
+                console.log("error from get random dish",err);
+                throw new Error(err);
+                
+            }
+
+        },
+
+        getRandomRestaurant: async(_,{name})=>{
+            try{
+
+                const response=await pool.query(`
+                    select * from ${name} order by random() limit 6
+                `)
+
+                return response.rows
+
+            }catch(err){
+                console.log("error from get random restaurnant restaurna",err);
+                throw new Error(err);
+            }
+
         }
+
 
 
 

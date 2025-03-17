@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 
 import { IoIosCheckbox } from "react-icons/io";
@@ -11,10 +11,18 @@ import SideImage from '../../assets/auth-images/auth-side-image.png'
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../../graphql/mutation/userMutation';
 import { toast } from 'react-toastify';
+import EyeButton from '../EyeButton';
+import { ShowEyeIcon } from '../ShowEyeIcon';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { TermsAndConditions } from '../TermsAndConditions';
 
 export const Signin = () => {
 
     const [policyCheck,setPolicyCheck]=useState(false)
+    const [showPassword,setShowPassword]=useState(false)
+    const [showConfirmPassword,setShowConfirmPassword]=useState(false)
+    const [showterms,setShowterms]=useState(false)
+    const [policyError,setPolicyError]=useState(false)
 
     const {
         register,
@@ -28,6 +36,11 @@ export const Signin = () => {
 
     const handleRegistration=async(userdata)=>{
         try{
+
+            if(!policyCheck){
+                setPolicyError(true)
+                return
+            }
 
             const {data}=await createUser({
                 variables:{name:userdata.name,password:userdata.password,email:userdata.email}
@@ -48,13 +61,27 @@ export const Signin = () => {
         navigate("/login?tag=user")
     }
 
+    const handleTermsAndPolicy=()=>{
+        setPolicyCheck((prev)=>!prev)
+        console.log(policyCheck);
+    }
+
+
+    useEffect(()=>{
+
+        if(policyCheck) setPolicyError(false)
+
+    },[policyCheck])
+
+    
+
+
 
   return (
         <div className='main-container'>            
 
             <div className='main-container-wrapper'>
 
-                {/* <p className='font-semibold text-4xl mt-2 ml-5'>TRING <span className='text-ctmgreen'>EATS</span> </p> */}
 
                 <div  className='flex justify-center items-center'>
                     <div className=' w-full p-9  md:w-[80%] md:p-5' >
@@ -94,11 +121,11 @@ export const Signin = () => {
                                 {errors.email && <p className="error-msg">{errors.email.message}</p>}
                             </div>
 
-                            <div className='space-y-2'>
+                            <div className='space-y-2 relative'>
                                 <p className='auth-label'>Password</p>
                                 <input
                                     className='input-field'
-                                    type='password'
+                                    type={ showPassword? 'text' : 'password'}
                                     placeholder='Enter your password'
                                     {...register("password",{
                                         required:"password is empty",
@@ -108,35 +135,41 @@ export const Signin = () => {
                                         }
                                     })}
                                     />
+
+                                    {showPassword ?  <EyeButton setShowPassword={setShowPassword} /> : <ShowEyeIcon setShowPassword={setShowPassword} />}
+
                                     {errors.password && <p className="error-msg">{errors.password.message}</p>}
                             </div>
 
-                            <div className='space-y-2'>
+                            <div className='space-y-2 relative'>
                                 <p className='auth-label'>Confirm password</p>
                                 <input
                                     className='input-field'
-                                    type='password'
+                                    type={ showConfirmPassword? 'text' : 'password'}
                                     placeholder='Enter confirm password'
                                     {...register("confirmPassword",{
                                         required:"confirm password is empty",
                                         validate:(data)=> data===watch("password") || "confirm password does not match password"
                                     })}
                                 />
+                                {showConfirmPassword ?  <EyeButton setShowPassword={setShowConfirmPassword} /> : <ShowEyeIcon setShowPassword={setShowConfirmPassword} />}
                                 {errors.confirmPassword && <p className="error-msg">{errors.confirmPassword.message}</p>}
                             </div>
 
-                            <div className='flex items-center space-x-2'>
+                            <div className='flex items-center space-x-2 '>
                                 
-                                <div onClick={()=>setPolicyCheck((prev)=>!prev)}>
+                                <div onClick={()=>handleTermsAndPolicy()} className='cursor-pointer'>
                                 {policyCheck? < IoIosCheckbox/>: <MdOutlineCheckBoxOutlineBlank/>}
                                 </div>
 
-                                <p className='text-xs'>I agree to the terms and policy </p>
+                                <p className='text-xs cursor-pointer hover:underline' onClick={()=>setShowterms(true)}>I agree to the terms and policy </p>
+
+                                {policyError && <p className="error-msg ">You must agree to the terms and conditions</p>}
 
                             </div>
 
                             
-                            <button type='submit'  className='signup-btn'>signup</button>
+                            <button disabled={loading} type='submit'  className='signup-btn'>{loading?  <AiOutlineLoading3Quarters className='mx-auto  animate-spin'/> :"signin"}</button>
 
                             <p className='footer-div'>OR</p>
 
@@ -155,6 +188,8 @@ export const Signin = () => {
             <div className='hidden sm:block sm:w-1/2 sm:h-full  bg-red-400 '>
                 <img  className='bg-mango w-full h-full object-contain' src={SideImage}/>
             </div>
+
+            {showterms  && <TermsAndConditions setShowterms={setShowterms} setPolicyCheck={setPolicyCheck}/>}
 
 
         </div>

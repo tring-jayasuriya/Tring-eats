@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 export const ArrowComponent = ({ name, page }) => {
   const [totalPageCount, setTotalPageCount] = useState(1);
+  console.log(">>>name",name, ">>>> page",page);
+  
   const navigate=useNavigate()
 
   const {
@@ -18,15 +20,18 @@ export const ArrowComponent = ({ name, page }) => {
 
   const handlePage = (curPage) => {
     if (curPage > 0 && curPage <= totalPageCount) {
-      name=="restaurant"? navigate(`/home/popular-restaurant?page=${curPage}`)  : navigate(`/home/dishes?page=${curPage}`);
+      name=="restaurant"? navigate(`/home/popular-restaurant?page=${curPage}`)  : name=="products"? navigate(`/home/dishes?page=${curPage}`) : navigate(`/home?type=history&page=${curPage}`);
     }
   };
 
   useEffect(() => {
     if (!PageCountLoading) {
-      setTotalPageCount(parseInt(TotalPageCount.getTotalPage.totalPage / 12));
+      setTotalPageCount(Math.ceil(TotalPageCount?.getTotalPage.totalPage / 12));
     }
   }, [PageCountLoading]);
+
+  console.log(">>>> total page",totalPageCount);
+  
 
   return (
     <div className="flex justify-around items-center space-x-8  text-lg mt-6">

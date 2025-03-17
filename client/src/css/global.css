@@ -15,7 +15,7 @@
 }
 
 .card{
-    @apply h-36 w-36 bg-white rounded-xl text-sm flex flex-col justify-center items-center gap-y-3
+    @apply h-36 w-36 bg-white rounded-xl text-sm flex flex-col justify-center items-center gap-y-3 hover:shadow-md
 }
 
 .big-card{
