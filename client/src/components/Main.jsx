@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import {Navigate, Outlet, useLocation, useNavigate} from 'react-router-dom'
 import { FiSearch } from "react-icons/fi";
-import { Dashboard } from './Dashboard';
+import { Dashboard } from './user/Dashboard';
 import Foodorder from './Foodorder';
 import { Favourite } from './Favourite';
 import OrderHistory from './OrderHistory';

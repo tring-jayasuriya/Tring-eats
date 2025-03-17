@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client'
 import React, { useState } from 'react'
-import { GET_MENU } from '../graphql/queries/restaurantQuery'
+import { GET_MENU } from '../../graphql/queries/restaurantQuery'
 import { useLocation } from 'react-router-dom'
-import '../css/global.css'
-import DishPopUp from './DishPopUp'
+
+import '../../css/global.css'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import DishPopUp from '../DishPopUp'
 
 const AllDish = () => {
 
@@ -24,14 +25,14 @@ const AllDish = () => {
         console.log(isDishClicked);
     }
 
-    console.log(data?.getMenu);
+
     
 
-    const  handlePage=(curPage)=>{
-        // if(page>0){
-        //     navigate(`/home/restaurant-dish?id=${curdata.id}`)
-        // }
-    }
+    // const  handlePage=(curPage)=>{
+    //     // if(page>0){
+    //     //     navigate(`/home/restaurant-dish?id=${curdata.id}`)
+    //     // }
+    // }
 
   return (
     <div className='common p-10'>

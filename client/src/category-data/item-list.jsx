@@ -27,8 +27,8 @@ export const CategoryData=[
         image:Fish
     },
     {
-        name:"Coffee",
-        image:Coffee
+        name:"Chicken",
+        image:Chicken
     },
     {
         name:"Bakery",

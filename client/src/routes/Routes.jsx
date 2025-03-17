@@ -13,9 +13,10 @@ import Category from "../components/Category"
 import PopularRestaurant from "../components/PopularRestaurant"
 import Dishes from "../components/Dishes"
 import ProtectedRoute from "../components/ProtectedRoute"
-import AllDish from "../components/AllDish"
+import AllDish from "../components/user/AllDish"
 import SearchDish from "../components/SearchDish"
 import RestaurantProtectedRoute from "../restaurant/RestaurantProtectedRoute"
+import { EmailVerificationPage } from "../components/Mail/EmailVerificationPage"
 
 const Router=()=>{
 
@@ -25,6 +26,7 @@ const Router=()=>{
                 <Route path="" element={<LandingPage/>}/>
                 <Route path="login" element={<Login/>}/>
                 <Route path="register" element={<Signin/>}/>
+                <Route path="email-verification" element={<EmailVerificationPage/>}/>
                 <Route path="home" element={
                         <ProtectedRoute>
                             <Home/>

@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import '../css/global.css'
-import  '../css/Homecss/dashboard.css'
-import SmileWoman from '../assets/dashbord/simly-woman.png'
-import { CategoryData } from '../category-data/item-list'
-import { Dishes } from '../category-data/dishes-data'
-import { Restaurant } from '../category-data/restaurant'
 import { useNavigate } from 'react-router-dom'
+
+import '../../css/global.css'
+import '../../css/Homecss/dashboard.css'
+
 import { useQuery } from '@apollo/client'
-import { GET_RANDOM_DISH, GET_RANDOM_RESTAURANT } from '../graphql/queries/restaurantQuery'
-import DishPopUp from './DishPopUp'
+import { GET_RANDOM_DISH, GET_RANDOM_RESTAURANT } from '../../graphql/queries/restaurantQuery'
+
+import DishPopUp from '../DishPopUp'
+
+import { CategoryData } from '../../category-data/item-list'
+import SmileWoman from '../../assets/dashbord/simly-woman.png'
+
 
 
 export const Dashboard = () => {
@@ -23,25 +26,15 @@ export const Dashboard = () => {
     const {data:randomDish,loading:RandomDishLoading,error:RandomDishError}=useQuery(GET_RANDOM_DISH,{fetchPolicy:"no-cache",variables:{name:"products"}})
     const {data,loading,error}=useQuery(GET_RANDOM_RESTAURANT,{fetchPolicy:"no-cache",variables:{name:"restaurant"}})
 
-    console.log("random dish data >>>>>>>>>>>.",randomDish)
-    console.log("random restaurant data >>>>>>>>>>>.",data)
-
-
     const hadldeDish = (curdata) => {
-        console.log("curdata", curdata);
-    
         setIsDishClicked(!isDishClicked);
         setPopupData(curdata);
-        console.log(isDishClicked);
-      };
+    };
 
-      const allDishes=(curdata)=>{
-        console.log(curdata);
+    const allDishes=(curdata)=>{
         navigate(`/home/restaurant-dish?id=${curdata.id}`)
     }
     
-
-
     const handleRoute=(name)=>{
         navigate(`/home/${name}?page=1`)
     }
