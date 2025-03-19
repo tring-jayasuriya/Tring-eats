@@ -1,22 +1,23 @@
-import {Route, Routes,} from  "react-router-dom"
+import {Route, Routes} from  "react-router-dom"
 import App from "../App"
 import { Login } from "../components/auth/Login"
 import { Signin } from "../components/auth/Signin"
 import { Home } from "../pages/Home"
-import Main from "../components/Main"
+import Main from "../components/user/Main"
 
 import { LandingPage } from "../pages/LandingPage"
 import { RestaurantSignUp } from "../restaurant/restaurantSignUp"
-import { RestaurantDashboard } from "../pages/RestaurantDashboard"
+import { RestaurantDashboard } from "../restaurant/RestaurantDashboard"
 
-import Category from "../components/Category"
-import PopularRestaurant from "../components/PopularRestaurant"
-import Dishes from "../components/Dishes"
-import ProtectedRoute from "../components/ProtectedRoute"
+import Category from "../components/user/Category"
+import PopularRestaurant from "../components/user/PopularRestaurant"
+import Dishes from "../components/user/Dishes"
+import ProtectedRoute from "./ProtectedRoute"
 import AllDish from "../components/user/AllDish"
-import SearchDish from "../components/SearchDish"
+import SearchDish from "../components/user/SearchDish"
 import RestaurantProtectedRoute from "../restaurant/RestaurantProtectedRoute"
 import { EmailVerificationPage } from "../components/Mail/EmailVerificationPage"
+import PageNotFound from "../pages/PageNotFound"
 
 const Router=()=>{
 
@@ -40,12 +41,13 @@ const Router=()=>{
                     <Route path="search" element={<SearchDish/>} />
                 </Route>
                 <Route path="tring-eats" element={<LandingPage/>}/>
-                <Route path="restaurant/signup" element={<RestaurantSignUp/>}/>
-                <Route path="restaurant" element={
-                    <RestaurantProtectedRoute>
-                        <RestaurantDashboard/>
-                    </RestaurantProtectedRoute>
+                <Route path="restaurant/signup" element={
+                        <RestaurantSignUp/>
                     }/>
+                <Route path="restaurant" element={
+                        <RestaurantDashboard/>
+                    }/>
+                <Route path="*" element={<PageNotFound/>}/>
             </Route>
 
         </Routes>

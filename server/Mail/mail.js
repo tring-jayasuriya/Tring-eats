@@ -1,34 +1,50 @@
 const transporter=require('./mailconfig');
-const VERIFICATION_EMAIL_TEMPLATE = require('./mailTemplate');
+const {ORDER_CONFIRMED_TEMPLATE, ORDER_CANCELLED_TEMPLATE } = require('./mailTemplate');
 
 
-const SendverificationEmail=async(email,verificationCode)=>{
-    console.log(process.env.EMAIL_ID);
-    console.log(process.env.EMAIL_PASS_KEY);
-    console.log("user email",email);
-    console.log("verification code",verificationCode);
-    
+const OrderConfirmationEmail=async(email)=>{
 
-    
-    
-    try{
+  try{
 
-      const mailOptions ={
+    const mailOptions={
         from: process.env.EMAIL_ID,
         to: email,
-        subject: "verify your email",
-        html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}",verificationCode),
-      }
-
-      const response=await transporter.sendMail(mailOptions)
-      console.log("email response >>> send verification email",response);
-      
-    }catch(err){
-      console.log("error from send mail",err)
-      throw new Error(err)
+        subject: "Order status",
+        html: ORDER_CONFIRMED_TEMPLATE
     }
-  
-  } 
 
-  module.exports=SendverificationEmail
+    await transporter.sendMail(mailOptions)
+
+  }catch(err){
+
+    console.log("error from OrderConfirmationEmail ",err);
+    
+  }
+
+}
+
+const OrderCancellationEmail=async(email)=>{
+
+  try{
+
+    const mailOptions={
+        from: process.env.EMAIL_ID,
+        to: email,
+        subject: "Order status",
+        html:ORDER_CANCELLED_TEMPLATE
+    }
+
+    await transporter.sendMail(mailOptions)
+
+  }catch(err){
+
+    console.log("error from OrderCancellationEmail ",err);
+    
+  }
+
+}
+
+
+
+  module.exports={OrderCancellationEmail,OrderConfirmationEmail}
   

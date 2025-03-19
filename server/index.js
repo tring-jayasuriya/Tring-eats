@@ -15,9 +15,22 @@ app.use(cors({
     credentials:true
 }))
 
+// const authenticateUser = (req,res,next) => {
+//     const typeHeader = req.headers.type
+//     console.log(">>>>>>",typeHeader);
+//     next()
+    
+// };
+
 
 app.use(express.json())
 app.use(cookieParser())
+// app.use(authenticateUser)
+
+
+
+
+
 
 const startServer=async()=>{
     try{

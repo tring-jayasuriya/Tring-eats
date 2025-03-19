@@ -49,7 +49,6 @@ const Overview = () => {
       
       const {data:updateStatus}= await updateRestaurantStatus({variables:{id:restaurantId,isopen:currStatus}})
 
-      console.log(">>>>>...........",updateStatus?.updateRestaurantStatus.isopen);
       
   }
 
@@ -58,7 +57,6 @@ const Overview = () => {
       setEditItems(editData)
   }
 
-  console.log(data?.getMenu ,">>>>>>>>>>>>>>>>");
   
   
 

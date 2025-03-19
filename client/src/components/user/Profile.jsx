@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { getLocalStorage } from './common/GetLocalStorage'
+import { getLocalStorage } from '../common/GetLocalStorage'
 import { useMutation, useQuery } from '@apollo/client'
-import { GET_PROFILE_DETAILS } from '../graphql/queries/userQuery'
+import { GET_PROFILE_DETAILS } from '../../graphql/queries/userQuery'
 
 import { FaRegEdit } from "react-icons/fa";
-import { UPDATE_USER_DETAILS } from '../graphql/mutation/userMutation';
+import { UPDATE_USER_DETAILS } from '../../graphql/mutation/userMutation';
 import { toast } from 'react-toastify';
 
-export const Favourite = () => {
+export const Profile = () => {
 
   const id=getLocalStorage("user").id
 

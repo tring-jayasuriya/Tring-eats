@@ -35,7 +35,7 @@
 }
 
 .common{
-    @apply bg-litMango w-[75%]
+    @apply bg-litMango w-[75%] 
 }
 
 .arrow{

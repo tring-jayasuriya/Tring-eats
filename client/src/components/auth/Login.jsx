@@ -13,8 +13,8 @@ import { useLazyQuery } from '@apollo/client';
 import { GET_USER } from '../../graphql/queries/userQuery';
 import { GET_RESTAURANT } from '../../graphql/queries/restaurantQuery'
 import { toast } from 'react-toastify'
-import EyeButton from '../EyeButton'
-import { ShowEyeIcon } from '../ShowEyeIcon'
+import EyeButton from '../common/EyeButton'
+import { ShowEyeIcon } from '../common/ShowEyeIcon'
 
 
 export const Login = () => {

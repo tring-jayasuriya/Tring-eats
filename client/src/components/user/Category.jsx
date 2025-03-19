@@ -1,5 +1,6 @@
 import React from 'react'
-import '../css/global.css'
+
+import '../../css/global.css'
 
 const Category = () => {
   return (

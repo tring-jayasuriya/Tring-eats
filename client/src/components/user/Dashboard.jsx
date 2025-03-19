@@ -7,7 +7,7 @@ import '../../css/Homecss/dashboard.css'
 import { useQuery } from '@apollo/client'
 import { GET_RANDOM_DISH, GET_RANDOM_RESTAURANT } from '../../graphql/queries/restaurantQuery'
 
-import DishPopUp from '../DishPopUp'
+import DishPopUp from './DishPopUp'
 
 import { CategoryData } from '../../category-data/item-list'
 import SmileWoman from '../../assets/dashbord/simly-woman.png'
@@ -38,7 +38,6 @@ export const Dashboard = () => {
     const handleRoute=(name)=>{
         navigate(`/home/${name}?page=1`)
     }
-
 
   return (
     <div className='w-full'>

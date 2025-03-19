@@ -13,7 +13,6 @@
     "@graphql-tools/merge": "^9.0.22",
     "apollo-server-express": "^3.13.0",
     "bcrypt": "^5.1.1",
-    "brcypt": "^1.0.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -22,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "postgraphile": "^4.14.0"
   }
 }

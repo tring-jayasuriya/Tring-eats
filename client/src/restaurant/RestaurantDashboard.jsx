@@ -4,7 +4,7 @@ import '../css/Homecss/Home.css'
 import  Overview  from '../components/Restaurant/Overview'
 import RestaurantOrder from '../components/Restaurant/RestaurantOrder'
 import AddMenu from '../components/Restaurant/AddMenu'
-import RestaurantLogout from '../restaurant/RestaurantLogout'
+import RestaurantLogout from './RestaurantLogout'
 
 export const RestaurantDashboard = () => {
 
@@ -41,8 +41,8 @@ export const RestaurantDashboard = () => {
             </div>
         </div>
         
-        <div className='conainer bg-litMango w-[75%]'>
-            <SelectedComponent/>
+        <div className='conainer bg-litMango w-[75%] h-full min-h-screen'>
+            <SelectedComponent className="h-full"/>
         </div>
     </div>
   )

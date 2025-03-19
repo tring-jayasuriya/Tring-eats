@@ -11,10 +11,10 @@ import SideImage from '../../assets/auth-images/auth-side-image.png'
 import { useMutation } from '@apollo/client';
 import { CREATE_USER } from '../../graphql/mutation/userMutation';
 import { toast } from 'react-toastify';
-import EyeButton from '../EyeButton';
-import { ShowEyeIcon } from '../ShowEyeIcon';
+import EyeButton from '../common/EyeButton';
+import { ShowEyeIcon } from '../common/ShowEyeIcon';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { TermsAndConditions } from '../TermsAndConditions';
+import { TermsAndConditions } from './TermsAndConditions';
 
 export const Signin = () => {
 
@@ -113,7 +113,7 @@ export const Signin = () => {
                                     {...register("email",{
                                         required:"email is empty",
                                         pattern:{
-                                            value:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/,
+                                            value:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                             message:"Invalid email"
                                         }
                                     })}

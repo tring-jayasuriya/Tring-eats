@@ -6,10 +6,13 @@ const RestaurantProtectedRoute = ({children}) => {
 
     const navigate=useNavigate
     const name=getLocalStorage("restaurant")?.name
+    console.log(name);
+    
     console.log("log from protected routes",name);
     
 
     useEffect(()=>{
+        if(name!==undefined) navigate("restaurant")  
         if(name===undefined) navigate("/login?tag=restaurant")
     })
 

@@ -28,8 +28,8 @@ export const LandingPage = () => {
 
             <div className='flex justify-end p-4 pr-8'>
                 <div className='nav-bar flex space-x-12'>
-                    <button>Home</button>
-                    <button>About us</button>
+                    {/* <button>Home</button>
+                    <button>About us</button> */}
                     <button onClick={()=>handleRegistration()}>Restaurant Insiders </button>
                     <button onClick={()=>handleSignin()} >Sign In</button>
                     <button onClick={()=>handleSignUp()}>Sign Up</button>

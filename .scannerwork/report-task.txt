@@ -1,0 +1,6 @@
+projectKey=tringeats
+serverUrl=http://localhost:9000
+serverVersion=25.1.0.102122
+dashboardUrl=http://localhost:9000/dashboard?id=tringeats
+ceTaskId=12386045-cd39-4738-99f6-74eec4b6556e
+ceTaskUrl=http://localhost:9000/api/ce/task?id=12386045-cd39-4738-99f6-74eec4b6556e

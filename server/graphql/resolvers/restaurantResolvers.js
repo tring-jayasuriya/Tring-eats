@@ -1,6 +1,7 @@
 const { Query } = require("pg")
 const { pool } = require("../../db/config")
 const { query } = require("express")
+const { OrderConfirmationEmail, OrderCancellationEmail } = require("../../Mail/mail")
 
 
 const restaurantResolver={
@@ -142,10 +143,23 @@ const restaurantResolver={
         orderStatus:async(_,{orderId,orderStatus})=>{
 
             try{
+
                 const res=await pool.query(
-                    `update orders set order_status = $1 where order_id=$2 `,
+                    `update orders set order_status = $1 where order_id=$2 returning user_id`,
                     [orderStatus,orderId]
                 )
+
+                const userId=res.rows[0].user_id;
+                
+
+                const response=await pool.query(
+                    `select email from users where id =$1`,
+                    [userId]
+                )
+
+                const useremail=response.rows[0].email
+
+                orderStatus==="success"? OrderConfirmationEmail(useremail) :OrderCancellationEmail(useremail)
 
                 return "alter succcess"
 

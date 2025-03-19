@@ -1,26 +1,24 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import React from 'react'
-import '../css/global.css'
+
+import '../../css/global.css'
+
+import { useMutation} from '@apollo/client'
+import { ADD_TO_CART } from '../../graphql/mutation/restaurantMutation';
 
 import { RxCross2 } from "react-icons/rx";
-import { ADD_TO_CART } from '../graphql/mutation/restaurantMutation';
 import { toast } from 'react-toastify';
-import { getLocalStorage } from './common/GetLocalStorage';
+import { getLocalStorage } from '../common/GetLocalStorage';
 
 const DishPopUp = ({Data,setIsDishClicked}) => {
 
     const [addToCart,{data,loading,error}]=useMutation(ADD_TO_CART,{fetchPolicy:"no-cache"})
     const userId=getLocalStorage("user").id
 
-    console.log(Data);
     const dup={...Data}
 
     const handleAddCart= async()=>{
         
         try{
-
-            console.log(">>>>>>>>>> dup",typeof(dup.id),typeof(dup.restaurant_id));
-            
 
             const {data}=await addToCart({
                 variables:{product_id:parseInt(dup.id),restaurant_id:dup.restaurant_id,user_id:userId}
@@ -31,7 +29,6 @@ const DishPopUp = ({Data,setIsDishClicked}) => {
             setTimeout(()=>{
                 setIsDishClicked(false)
             },500)
-
             
 
         }catch(err){
@@ -43,8 +40,6 @@ const DishPopUp = ({Data,setIsDishClicked}) => {
         }
     }
 
-    console.log("cart response",data?.addToCart);
-    
 
   return (
     <div className='fixed flex inset-0 justify-center items-center bg-blackop  z-100'>

@@ -1,21 +1,20 @@
-import { useQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { GET_ORDER_HISTORY } from '../graphql/queries/restaurantQuery'
-import { getLocalStorage } from './common/GetLocalStorage'
-import _ from 'lodash'
+
+import { useQuery } from '@apollo/client'
+import { GET_ORDER_HISTORY } from '../../graphql/queries/restaurantQuery'
+
+import { getLocalStorage } from '../common/GetLocalStorage'
 import { HistoryTable } from './HistoryTable'
-import { getPageUrl } from './common/GetPage'
-import { ArrowComponent } from './ArrowComponent'
+import { getPageUrl } from '../common/GetPage'
+import { ArrowComponent } from '../common/ArrowComponent'
+import _ from 'lodash'
 
 const OrderHistory = () => {
 
   const id=getLocalStorage("user").id 
   const page=getPageUrl()
 
-  console.log("?>> page",page);
-  
-
-  const {data,refetch}=useQuery(GET_ORDER_HISTORY,{fetchPolicy:"no-cache",variables:{id:id,page:page}})
+  const {data,refetch,loading}=useQuery(GET_ORDER_HISTORY,{fetchPolicy:"no-cache",variables:{id:id,page:page}})
   const [groupedOrder,setGroupedOrder]=useState([])
 
 
@@ -27,27 +26,19 @@ const OrderHistory = () => {
         .sort(([a], [b]) => Number(b) - Number(a))
         .map(([order_id, orders]) => ({ order_id: Number(order_id), orders }));
 
-
-        console.log(">>>> sorted grouped order", sortedGroupedOrder);
-
-        console.log("grouped order", GroupedOrder);
-        
-        
         setGroupedOrder(sortedGroupedOrder)
        
       }
       refetch()
   
-    },[data])
+    },[data])  
 
-    console.log(groupedOrder);
-    console.log(">>>>> order history", data?.getOrderHistory);
-  
+    if(loading) return (<p className='h-full text-center text-3xl font-bold'>Loading! Please wait</p>)
 
   return (
 
-    <div className='w-full space-y-4'>
-      <p className='font-medium'>Order summary</p>
+    <div className='w-full space-y-4'> 
+      <p className='font-medium text-center'>Order summary</p>
      { data?.getOrderHistory &&
       <HistoryTable groupedOrder={groupedOrder}/>}
       <ArrowComponent  name={"orders"} page={page}/>

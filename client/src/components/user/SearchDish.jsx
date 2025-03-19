@@ -1,7 +1,9 @@
-import { useQuery } from '@apollo/client'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { SEARCH_DISH } from '../graphql/queries/restaurantQuery'
+
+import { useQuery } from '@apollo/client'
+import { SEARCH_DISH } from '../../graphql/queries/restaurantQuery'
+
 import DishGrid from './DishGrid'
 
 const SearchDish = () => {
@@ -13,14 +15,7 @@ const SearchDish = () => {
     const page=parseInt(queryParams.get("page"))
     const {search}=location.state
 
-    console.log(">>>>>>>>>>>>",search);
-    
-
-    const {data}=useQuery(SEARCH_DISH,{fetchPolicy:"no-cache",variables:{name:search,page:page}})
-
-    console.log(">>>>>>>>>>> page",page);
-    console.log(">>>>>>>>> serach data ",data?.searchDish);
-    
+    const {data}=useQuery(SEARCH_DISH,{fetchPolicy:"no-cache",variables:{name:search,page:page}})    
      
   return (
     <div className='w-[75%] text-center bg-litMango'>

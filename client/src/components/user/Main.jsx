@@ -1,16 +1,13 @@
-
-
 import React, { useEffect, useState } from 'react'
-import {Navigate, Outlet, useLocation, useNavigate} from 'react-router-dom'
-import { FiSearch } from "react-icons/fi";
-import { Dashboard } from './user/Dashboard';
-import Foodorder from './Foodorder';
-import { Favourite } from './Favourite';
-import OrderHistory from './OrderHistory';
-import { deleteLocalStorage, getLocalStorage } from './common/GetLocalStorage';
+import { useLocation} from 'react-router-dom'
 
-import '../css/global.css'
-import { Header } from './Header';
+import '../../css/global.css'
+
+import { Dashboard } from './Dashboard';
+import Foodorder from './Foodorder';
+import { Profile} from './Profile';
+import OrderHistory from './OrderHistory';
+import { Header } from '../Layouts/Header';
 
 const Main = () => {
 
@@ -22,21 +19,15 @@ const Main = () => {
         longitude:""
 
     })
-    const[search,setSearch]=useState("")
-
-    const navigate=useNavigate()
-
 
     const componentList={
         dashboard:Dashboard,
         orders:Foodorder,
-        favourite:Favourite,
+        profile:Profile,
         history:OrderHistory
     }
 
     const CurrentComponent=componentList[componentName] 
-
-
 
     useEffect(()=>{
         if("geolocation" in navigator){
@@ -52,7 +43,6 @@ const Main = () => {
     },[])
 
     useEffect(()=>{
-
         const fetchLocation=async()=>{
             if(myLocation.latitude!==''){
                 const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${myLocation.latitude}&lon=${myLocation.longitude}&format=json`);
@@ -62,15 +52,12 @@ const Main = () => {
         }
 
         fetchLocation()
-       
 
     },[myLocation])
 
 
-    console.log(myLocation);
-
   return (
-    <div className=' md:w-[75%] bg-litMango p-10 pt-6 '>
+    <div className=' md:w-[75%] bg-litMango h-screen overflow-y-scroll p-10 pt-6 '>
         <Header/>
         <CurrentComponent/>
     </div>

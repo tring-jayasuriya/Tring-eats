@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ViewDetailsPopup } from './ViewDetailsPopup'
+import { ViewDetailsPopup } from '../ViewDetailsPopup'
 
 export const HistoryTable = ({groupedOrder}) => {
 

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { TOTAL_PAGE } from "../graphql/queries/restaurantQuery";
+import { TOTAL_PAGE } from "../../graphql/queries/restaurantQuery";
 import { useNavigate } from "react-router-dom";
 
 export const ArrowComponent = ({ name, page }) => {

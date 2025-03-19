@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import '../css/global.css'
-import { RiDeleteBinLine } from "react-icons/ri";
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_FROM_CART } from '../graphql/queries/restaurantQuery';
-import { CONFIRM_ORDER, DELETE_ITEM, IS_RESTAURANT_OPEN } from '../graphql/mutation/restaurantMutation';
-import { toast } from 'react-toastify';
-import { getLocalStorage } from './common/GetLocalStorage';
 import { useNavigate } from 'react-router-dom';
+
+import '../../css/global.css'
+
+import { useMutation, useQuery } from '@apollo/client';
+import { CONFIRM_ORDER, DELETE_ITEM, IS_RESTAURANT_OPEN } from '../../graphql/mutation/restaurantMutation';
+import { GET_FROM_CART } from '../../graphql/queries/restaurantQuery';
+
+import { toast } from 'react-toastify';
+import { getLocalStorage } from '../common/GetLocalStorage';
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const Foodorder = () => {
 
@@ -114,10 +117,10 @@ const Foodorder = () => {
 
                 <img className='w-[30%] h-[65%] rounded-md'  src={Data.image} />
 
-                <div className='flex flex-col justify-center items-center gap-y-2'>
-                  <p className='text-base'>{Data.name}</p>
+                <div className='flex flex-col text-center justify-center items-center gap-y-2'>
+                  <p className='text-base '>{Data.name}</p>
                   <p className='price text-base'>${Data.price}</p>
-                  <p className='text-xs'>{Data.restaurant_name}</p>
+                  <p className='text-xs '>{Data.restaurant_name}</p>
                 </div>
 
                 <div className='flex flex-col gap-y-3 min-w-28 pr-4 justify-center items-center'>

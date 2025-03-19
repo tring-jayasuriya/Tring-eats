@@ -12,8 +12,8 @@ import SideImage from '../assets/auth-images/auth-side-image.png'
 import { useMutation } from '@apollo/client';
 import { CREATE_RESTAURANT } from '../graphql/mutation/restaurantMutation';
 import { toast } from 'react-toastify';
-import EyeButton from '../components/EyeButton';
-import { ShowEyeIcon } from '../components/ShowEyeIcon';
+import EyeButton from '../components/common/EyeButton';
+import { ShowEyeIcon } from '../components/common/ShowEyeIcon';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 export const RestaurantSignUp = () => {
@@ -165,7 +165,7 @@ export const RestaurantSignUp = () => {
                                 {errors.confirmPassword && <p className="error-msg">{errors.confirmPassword.message}</p>}
                             </div>
 
-                            <div className='flex items-center space-x-2'>
+                            {/* <div className='flex items-center space-x-2'>
                                 
                                 <div onClick={()=>setPolicyCheck((prev)=>!prev)}>
                                 {policyCheck? < IoIosCheckbox/>: <MdOutlineCheckBoxOutlineBlank/>}
@@ -173,7 +173,7 @@ export const RestaurantSignUp = () => {
 
                                 <p className='text-xs'>I agree to the terms and policy </p>
 
-                            </div>
+                            </div> */}
 
                             
                             <button disabled={loading} type='submit'  className='signup-btn'>{loading?  <AiOutlineLoading3Quarters className='mx-auto  animate-spin'/> :"signin"}</button>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import "../css/global.css";
-import { getPageUrl } from "./common/GetPage";
-import { GET_REST, TOTAL_PAGE } from "../graphql/queries/restaurantQuery";
+
+import '../../css/global.css'
+import { getPageUrl } from "../common/GetPage";
+import { GET_REST, TOTAL_PAGE } from "../../graphql/queries/restaurantQuery";
 import { useQuery } from "@apollo/client";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { ArrowComponent } from "./ArrowComponent";
+import { ArrowComponent } from "../common/ArrowComponent";
 
 const PopularRestaurant = () => {
   const navigate = useNavigate();
@@ -44,8 +45,8 @@ const PopularRestaurant = () => {
   console.log(">>>>>>>", data);
 
   return (
-    <div className="common p-4 pb-10">
-      <p className="text-center text-xl font-medium mt-1">Restaurant</p>
+    <div className="common p-4 pb-10 h-screen  overflow-y-scroll">
+      <p className="text-center text-3xl pt-4 font-semibold mt-1">Restaurants</p>
       <div className="grid grid-cols-4 gap-4 p-9">
         {data?.getRest.map((curdata) => (
           <div

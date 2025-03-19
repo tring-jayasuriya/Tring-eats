@@ -1,6 +1,7 @@
 import React from 'react'
-import '../css/Homecss/Home.css'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import '../../css/Homecss/Home.css'
 
 const SideBar = () => {
 
@@ -25,7 +26,7 @@ const SideBar = () => {
             <p onClick={()=>handleComponent("dashboard")} className={`dashboard-items ${componentName=="dashboard" && "isActive" }`} >Dashboard</p>
             <p onClick={()=>handleComponent("orders")} className={`dashboard-items ${componentName=="orders" && "isActive" }`}>My cart</p>
             <p onClick={()=>handleHistoryComponent("history")} className={`dashboard-items ${componentName=="history" && "isActive" }`}>Order History</p>
-            <p onClick={()=>handleComponent("favourite")} className={`dashboard-items ${componentName=="favourite" && "isActive" }`} >Profile</p>
+            <p onClick={()=>handleComponent("profile")} className={`dashboard-items ${componentName=="profile" && "isActive" }`} >Profile</p>
         </div>
     </div>
     

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "../css/global.css";
-import { useQuery } from "@apollo/client";
-import { GET_DISHES, TOTAL_PAGE } from "../graphql/queries/restaurantQuery";
-import { getPageUrl } from "./common/GetPage";
-import { FaArrowLeft } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
+import '../../css/global.css'
+
+import { useQuery } from "@apollo/client";
+import { GET_DISHES, TOTAL_PAGE } from "../../graphql/queries/restaurantQuery";
+
+import { getPageUrl } from "../common/GetPage";
 import DishPopUp from "./DishPopUp";
-import { Header } from "./Header";
-import { ArrowComponent } from "./ArrowComponent";
+import { Header } from "../Layouts/Header";
+import { ArrowComponent } from "../common/ArrowComponent";
 
 const Dishes = () => {
   const navigate = useNavigate();
@@ -25,22 +26,20 @@ const Dishes = () => {
     variables: { name: "products" },
   });
 
-  console.log(">>>>>>>>>>>>>", TotalPageCount?.getTotalPage.totalPage);
+  // const customerHeader={
+  //   headers:{
+  //     type:"customer"
+  //   }
+  // }
+
 
   const { data, loading, error } = useQuery(GET_DISHES, {
     variables: { page: page },
-    fetchPolicy: "no-cache",
+    fetchPolicy: "no-cache"
+    // context:customerHeader
   });
 
-  const handlePage = (curPage) => {
-    if (curPage > 0 && curPage <= totalPageCount) {
-      navigate(`/home/dishes?page=${curPage}`);
-    }
-  };
-
   const hadldeDish = (curdata) => {
-    console.log("curdata", curdata);
-
     setIsDishClicked(!isDishClicked);
     setPopupData(curdata);
     console.log(isDishClicked);
@@ -51,10 +50,9 @@ const Dishes = () => {
       setTotalPageCount(Math.ceil(TotalPageCount?.getTotalPage.totalPage / 12));
     }
   }, [PageCountLoading]);
-  console.log(totalPageCount);
 
   return (
-    <div className="common py-5 px-10">
+    <div className="common py-5 px-10 h-screen  overflow-y-scroll">
       <div className="flex justify-center ">
         <Header />
       </div>
@@ -63,7 +61,7 @@ const Dishes = () => {
         <p className="text-center text-xl font-medium pb-4">Dishes</p>
 
         {loading ? (
-          <p>Loading</p>
+          <p className="text-center text-lg pt-36 font-semibold">Loading</p>
         ) : (
           <div>
             <div className="grid grid-cols-4 gap-4">

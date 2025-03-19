@@ -2,8 +2,7 @@ const { Query } = require("pg")
 const { pool } = require("../../db/config")
 const generateToken = require("../../utils/generateJwtToken")
 const setCookie = require("../../utils/setCookie")
-const generateVerificationCode = require("../../utils/generateVerificationCode")
-const SendverificationEmail = require("../../Mail/mail")
+const bcrypt=require('bcrypt')
 
 
 
@@ -14,28 +13,26 @@ const userResolver={
 
             try{
 
-                console.log("<>>>>",process.env.EMAIL_ID);
-
                 const existingUser=await pool.query("SELECT * FROM users WHERE email=$1",
                     [email]
                 )
 
                 if(existingUser.rowCount>0) throw new Error("user already have an account")
+
+                // const hashedPassword=await bcrypt.hash(password,20)
+
+                // console.log("hashed password",hashedPassword);
+                
                 
                 const res=await pool.query(
                     "INSERT INTO users(name,password,email) VALUES ($1,$2,$3) RETURNING name, email, id",
                     [name,password,email]
                 )
 
-                // const code=generateVerificationCode()
-
-                // const emailResponse=await SendverificationEmail(email,code)
-
-                // console.log("mail response log");
-                
-
                 console.log(res.rows[0]);
                 console.log("user registration successfull");
+
+                console.log(res.rows[0]);
                 
                 return res.rows[0]
                 
@@ -68,8 +65,6 @@ const userResolver={
 
     },
 
-
-
     Query:{
         getUser:async(_,{email,password},{res})=>{
             console.log("log from get user");
@@ -80,11 +75,11 @@ const userResolver={
                     [email]
                 )
 
-                
-
                 if(response.rowCount===0)  return {emailError:true}
             
                 const checkPassword=response.rows[0].password
+
+                // const Password=await bcrypt.compare(checkPassword,password)
 
                 if(checkPassword!==password) return {passwordError:true}
 
@@ -95,17 +90,7 @@ const userResolver={
 
                 const token=generateToken(user)
 
-                // const code=generateVerificationCode()
-
-                // const emailResponse=await SendverificationEmail(email,code)
-
-                // console.log("mail response log",emailResponse);
-
-
                 setCookie(token,res)
-                
-
-                console.log(response.rows[0]);
                 
                 
                 return {...response.rows[0],isAuthenticated:true}
@@ -118,9 +103,6 @@ const userResolver={
         },
 
         getProfileDetails: async(_,{id})=>{
-
-            console.log(">>>>>>id",id);
-            
 
             try{
                 const response=await pool.query(
