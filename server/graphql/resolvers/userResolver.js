@@ -49,7 +49,6 @@ const userResolver={
 
                 console.log(name , email , city,address);
                 
-    
                 const response=await pool.query(
                     `update users set name=$1, city=$2, address=$3 where email=$4`,
                     [name,city,address,email]

@@ -502,9 +502,6 @@ const restaurantResolver={
 
         }
 
-
-
-
     }
 }
 

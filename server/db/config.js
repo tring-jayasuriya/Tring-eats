@@ -1,12 +1,12 @@
-const {Pool}=require("pg")
+// const {Pool}=require("pg")
 
-const pool=new Pool({
-    user:"postgres",
-    host:"localhost",
-    database:"Tringeats",
-    password:"1234",
-    port:5432
-})
+// const pool=new Pool({
+//     user:"postgres",
+//     host:"localhost",
+//     database:"Tringeats",
+//     password:"1234",
+//     port:5432
+// })
 
 const connectDB=async()=>{
 
@@ -26,4 +26,4 @@ const connectDB=async()=>{
 
 }
 
-module.exports={pool,connectDB}
+// module.exports={pool,connectDB}

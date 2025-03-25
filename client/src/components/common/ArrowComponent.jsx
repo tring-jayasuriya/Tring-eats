@@ -1,43 +1,13 @@
-import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { TOTAL_PAGE } from "../../graphql/queries/restaurantQuery";
-import { useNavigate } from "react-router-dom";
 
-export const ArrowComponent = ({ name, page }) => {
-  const [totalPageCount, setTotalPageCount] = useState(1);
-  console.log(">>>name",name, ">>>> page",page);
-  
-  const navigate=useNavigate()
-
-  const {
-    data: TotalPageCount,
-    loading: PageCountLoading,
-    error: pageCountError,
-  } = useQuery(TOTAL_PAGE, {
-    variables: { name: name },
-  });
-
-  const handlePage = (curPage) => {
-    if (curPage > 0 && curPage <= totalPageCount) {
-      name=="restaurant"? navigate(`/home/popular-restaurant?page=${curPage}`)  : name=="products"? navigate(`/home/dishes?page=${curPage}`) : navigate(`/home?type=history&page=${curPage}`);
-    }
-  };
-
-  useEffect(() => {
-    if (!PageCountLoading) {
-      setTotalPageCount(Math.ceil(TotalPageCount?.getTotalPage.totalPage / 12));
-    }
-  }, [PageCountLoading]);
-
-  console.log(">>>> total page",totalPageCount);
-  
+export const ArrowComponent = ({  page ,totalPage,handlePageChange }) => {
 
   return (
     <div className="flex justify-around items-center space-x-8  text-lg mt-6">
-      <FaArrowLeft onClick={() => handlePage(page - 1)} className="arrow" />
-      <p>{page} of {totalPageCount}</p>
-      <FaArrowRight onClick={() => handlePage(page + 1)} className="arrow" />
+      <FaArrowLeft onClick={() => handlePageChange(page-1)} className="arrow" />
+      <p>{page} of {totalPage}</p>
+      <FaArrowRight onClick={() => handlePageChange(page+1)} className="arrow" />
     </div>
   );
 };

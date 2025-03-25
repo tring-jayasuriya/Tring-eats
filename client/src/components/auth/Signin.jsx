@@ -32,9 +32,10 @@ export const Signin = () => {
     }=useForm()
 
     const navigate=useNavigate()
-    const[createUser,{loading,error}]=useMutation(CREATE_USER,{fetchPolicy:"no-cache"})
+    const[createUser,{data,loading,error}]=useMutation(CREATE_USER,{fetchPolicy:"no-cache"})
 
     const handleRegistration=async(userdata)=>{
+
         try{
 
             if(!policyCheck){
@@ -42,13 +43,12 @@ export const Signin = () => {
                 return
             }
 
-            const {data}=await createUser({
+            await createUser({
                 variables:{name:userdata.name,password:userdata.password,email:userdata.email}
             })
 
-            console.log(data.createUser);
-            toast.success("registration successfull")
-            navigate("/login?tag=user")
+            console.log(data?.register);
+
             
         }catch(err){
             toast.error(err.message)
@@ -57,9 +57,19 @@ export const Signin = () => {
         
     }
 
+    useEffect(()=>{
+        if(data?.register){
+            toast.success(data?.register)
+            navigate("/login?tag=user")
+        }
+
+    },[data])
+
     const handleLogin=()=>{
         navigate("/login?tag=user")
     }
+
+    console.log("create user log",data?.register);
 
     const handleTermsAndPolicy=()=>{
         setPolicyCheck((prev)=>!prev)
@@ -180,7 +190,6 @@ export const Signin = () => {
                     </div>
 
                 </div>
-
 
 
             </div>

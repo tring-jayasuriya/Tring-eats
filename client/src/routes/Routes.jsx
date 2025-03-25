@@ -29,9 +29,7 @@ const Router=()=>{
                 <Route path="register" element={<Signin/>}/>
                 <Route path="email-verification" element={<EmailVerificationPage/>}/>
                 <Route path="home" element={
-                        <ProtectedRoute>
                             <Home/>
-                        </ProtectedRoute>
                     }>
                     <Route path="" element={<Main/>}/>
                     <Route path="dishes" element={<Dishes/>} />

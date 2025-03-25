@@ -14,42 +14,40 @@ import { ArrowComponent } from "../common/ArrowComponent";
 const Dishes = () => {
   const navigate = useNavigate();
   const page = getPageUrl();
+  const offset=(page-1)*12
   const [isDishClicked, setIsDishClicked] = useState(false);
   const [popupData, setPopupData] = useState({});
   const [totalPageCount, setTotalPageCount] = useState(1);
 
-  const {
-    data: TotalPageCount,
-    loading: PageCountLoading,
-    error: pageCountError,
-  } = useQuery(TOTAL_PAGE, {
-    variables: { name: "products" },
-  });
-
-  // const customerHeader={
-  //   headers:{
-  //     type:"customer"
-  //   }
-  // }
-
 
   const { data, loading, error } = useQuery(GET_DISHES, {
-    variables: { page: page },
+    variables: { first: 12, offset: offset},
     fetchPolicy: "no-cache"
-    // context:customerHeader
   });
+
+  if(data?.allProducts) console.log(">>>>>>>>>>>>.",data?.allProducts);
+
+
+  const handlePageChange=(curPage)=>{
+    if (curPage > 0 && curPage <= totalPageCount) 
+      navigate(`/home/dishes?page=${curPage}`)
+  }
+  
+
+  
 
   const hadldeDish = (curdata) => {
     setIsDishClicked(!isDishClicked);
     setPopupData(curdata);
-    console.log(isDishClicked);
   };
 
   useEffect(() => {
-    if (!PageCountLoading) {
-      setTotalPageCount(Math.ceil(TotalPageCount?.getTotalPage.totalPage / 12));
+
+    if(data?.allProducts){
+      setTotalPageCount(Math.ceil(data?.allProducts?. totalCount/12))
     }
-  }, [PageCountLoading]);
+
+  }, [data]);
 
   return (
     <div className="common py-5 px-10 h-screen  overflow-y-scroll">
@@ -65,7 +63,7 @@ const Dishes = () => {
         ) : (
           <div>
             <div className="grid grid-cols-4 gap-4">
-              {data?.getDishes.map((curdata) => (
+              {data?.allProducts?.nodes.map((curdata) => (
                 <div
                   key={curdata.id}
                   className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md cursor-pointer"
@@ -86,7 +84,7 @@ const Dishes = () => {
               ))}
             </div>
 
-            <ArrowComponent name={"products"} page={page} />
+            <ArrowComponent  page={page} totalPage={totalPageCount}  handlePageChange={handlePageChange}/>
           </div>
         )}
 

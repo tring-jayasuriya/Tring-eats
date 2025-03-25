@@ -9,7 +9,7 @@ import '../../css/Authcss/auth.css'
 
 import { IoIosCheckbox } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_USER } from '../../graphql/queries/userQuery';
 import { GET_RESTAURANT } from '../../graphql/queries/restaurantQuery'
 import { toast } from 'react-toastify'
@@ -42,7 +42,7 @@ export const Login = () => {
         formState:{errors},
     }=useForm()
     
-    const [getData,{data,loading,error}]=useLazyQuery(path,{fetchPolicy:"no-cache"})
+    const [getData,{data,loading,error}]=useMutation(GET_USER,{fetchPolicy:"no-cache"})
 
 
     const handleSignUp=()=>{
@@ -55,7 +55,7 @@ export const Login = () => {
             console.log(userdata);
 
             await getData({
-                variables:{email:userdata.email,password:userdata.password}
+                variables:{email:userdata.email,password:userdata.password,type:"user"}
             })
 
             console.log("log from handle login");
@@ -69,30 +69,35 @@ export const Login = () => {
 
     useEffect(()=>{
 
-        if(data?.getData?.emailError){
-            setPasswordError(false)
-            setEmailError(true)
-        }
+        // if(data?.getData?.emailError){
+        //     setPasswordError(false)
+        //     setEmailError(true)
+        // }
 
-        if(data?.getData?.passwordError){
-            setEmailError(false)
-            setPasswordError(true)
-        }
+        // if(data?.getData?.passwordError){
+        //     setEmailError(false)
+        //     setPasswordError(true)
+        // }
         
-        if(data?.getData?.isAuthenticated){
-            setEmailError(false)
-            setPasswordError(false)
-            const localData={
-                email:data.getData.email,
-                id:data.getData.id,
-                name:data.getData.name
-            }
-            localStorage.setItem(componentName,JSON.stringify(localData))
-            toast.success(`welcome back ${localData.name}`)
-            componentName==="user"? navigate("/home?type=dashboard") : navigate("/restaurant")
-        }
+        // if(data?.getData?.isAuthenticated){
+        //     setEmailError(false)
+        //     setPasswordError(false)
+        //     const localData={
+        //         email:data.getData.email,
+        //         id:data.getData.id,
+        //         name:data.getData.name
+        //     }
+        //     localStorage.setItem(componentName,JSON.stringify(localData))
+        //     toast.success(`welcome back ${localData.name}`)
+        //     componentName==="user"? navigate("/home?type=dashboard") : navigate("/restaurant")
+        // }
 
     },[data])
+
+    if(data?.login){ 
+        console.log(data?.login);
+        navigate("/home?type=dashboard")
+    }
 
   return (
         <div className='main-container'>            

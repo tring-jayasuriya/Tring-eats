@@ -15,28 +15,38 @@ export const GET_RESTAURANT = gql`
 `;
 
 export const GET_DISHES = gql`
-  query getDishes($page: Int!) {
-    getDishes(page: $page) {
+  query user($first:Int,$offset:Int) {
+  allProducts(first: $first, offset: $offset) {
+    nodes {
+      isavailable
+      image
       id
       name
-      image
       price
-      restaurant_id
-      restaurant_name
+      restaurantid
+      restaurantByRestaurantid {
+        name
+      }
     }
+    totalCount
   }
+}
+
 `;
 
 export const GET_REST = gql`
-  query getRest($page: Int!) {
-    getRest(page: $page) {
-      name
-      image
-      city
+ query user($first:Int,$offset: Int) {
+  allRestaurants(first: $first, offset: $offset) {
+    nodes {
       id
+      image
       isopen
+      name
     }
+    totalCount
   }
+}
+
 `;
 
 export const GET_FROM_CART = gql`
@@ -53,15 +63,24 @@ export const GET_FROM_CART = gql`
 `;
 
 export const GET_MENU = gql`
-  query getMenu($id: Int!) {
-    getMenu(id: $id) {
-      name
-      price
-      id
-      image
-      restaurant_id
+ query user($restaurantid:Int) {
+    allProducts(condition: {restaurantid:$restaurantid }) {
+      nodes {
+        id
+        image
+        isavailable
+        name
+        price
+        restaurantByRestaurantid {
+          id
+          name
+          isopen
+        }
+      }
+      totalCount
     }
-  }
+}
+
 `;
 
 export const GET_STATUS = gql`
@@ -130,28 +149,55 @@ export const TOTAL_PAGE = gql`
 `;
 
 export const GET_RANDOM_DISH = gql`
-    query getRandomDish($name:String!){
-            getRandomDish(name:$name){
-            id
-            name
-            price
-            image
-            restaurant_id
-            restaurant_name
-            isavailable
+  query user {
+  allProducts(first: 6) {
+      nodes {
+        id
+        image
+        isavailable
+        name
+        price
+        restaurantByRestaurantid {
+          id
+          name
+          isopen
         }
+      }
     }
+  }
 `;
 
+// export const GET_RANDOM_RESTAURANT=gql`
+//     query getRandomRestaurant($name:String!){
+//         getRandomRestaurant(name:$name){
+//             id
+//             name
+//             city
+//             address
+//             image
+//             isopen
+//         }
+//     }
+// `
 export const GET_RANDOM_RESTAURANT=gql`
-    query getRandomRestaurant($name:String!){
-        getRandomRestaurant(name:$name){
-            id
-            name
-            city
-            address
-            image
-            isopen
+    query user {
+      allRestaurants(condition: {isopen: true}, first: 6) {
+        nodes {
+          image
+          name
+          id
+          address
+          city
+          productsByRestaurantid {
+            nodes {
+              image
+              id
+              name
+              price
+              restaurantid
+            }
+          }
         }
+      }
     }
 `

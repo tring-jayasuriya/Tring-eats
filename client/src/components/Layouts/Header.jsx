@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom'
 
 import { deleteLocalStorage, getLocalStorage } from '../common/GetLocalStorage'
 import { FiSearch } from 'react-icons/fi'
+import { useMutation } from '@apollo/client'
+import { LOGOUT } from '../../graphql/mutation/userMutation'
+import { toast } from 'react-toastify'
 
 export const Header = () => {
 
     const navigate=useNavigate()
     const user=getLocalStorage("user")
     const[search,setSearch]=useState("")
+    const [logout, {data,loading,error}]=useMutation(LOGOUT,{fetchPolicy:"no-cache"})
 
     const handleSearch=(e)=>{
         setSearch(e.target.value)
@@ -22,8 +26,9 @@ export const Header = () => {
         }
     }
 
-    const handleLogOut=()=>{
-        deleteLocalStorage("user")
+    const handleLogOut=async()=>{
+        await logout()
+        toast.success(data?.logout)
         navigate("/login")
     }
 

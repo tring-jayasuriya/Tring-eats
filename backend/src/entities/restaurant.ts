@@ -10,11 +10,17 @@ export class Restaurant{
     @Column()
     name! : string;
 
+    @Column()
+    email! : string;
+
     @Column({type:"boolean",default:true})
     isopen! : boolean;
 
     @Column({nullable:true})
     address? : string;
+
+    @Column()
+    password! : string;
 
     @Column({nullable:true})
     city ?: string

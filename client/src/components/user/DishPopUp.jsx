@@ -11,8 +11,10 @@ import { getLocalStorage } from '../common/GetLocalStorage';
 
 const DishPopUp = ({Data,setIsDishClicked}) => {
 
+    console.log("popup data",Data);
+    
+
     const [addToCart,{data,loading,error}]=useMutation(ADD_TO_CART,{fetchPolicy:"no-cache"})
-    const userId=getLocalStorage("user").id
 
     const dup={...Data}
 
@@ -47,7 +49,7 @@ const DishPopUp = ({Data,setIsDishClicked}) => {
             <RxCross2 className='absolute right-3 top-1 cursor-pointer text-xl' onClick={()=>setIsDishClicked(false)}/>
             <img className='w-[90%] h-44 rounded-lg' src={Data.image}/>
             <p className='subtitle'>{Data.name}</p>
-            <p className='text-sm'>{Data.restaurant_name}</p>
+            <p className='text-sm'>{Data?.restaurantByRestaurantid?.name}</p>
             <p className='price'>${Data.price}</p>
 
             <button className='bg-mango text-white w-[90%] rounded-lg p-2' onClick={()=>handleAddCart()}>Add to cart</button>

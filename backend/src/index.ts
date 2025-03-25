@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { AuthPlugin } from "./user/plugins/authplugin";
 import dotenv from  "dotenv"
 import cors from "cors"
+import { verifyJwtToken } from "./utils/verifyJwtToken";
 // import { authenticateJWT } from "./middleware/authMiddleware";
 
 dotenv.config()
@@ -16,7 +17,6 @@ app.use(cors({
 }))
 app.use(cookieParser());
 app.use(express.json());
-// app.use(authenticateJWT)
 
 const PORT = process.env.PORT || 5000;
 
@@ -27,32 +27,35 @@ app.use(
     enhanceGraphiql: true, // Better UI for GraphiQL
     dynamicJson: true, // Return JSON fields as objects
     // enableCors: true, // Allow CORS
+    // jwtSecret: process.env.JWT_SECRET_KEY, // Ensure JWT is properly verified
+    // jwtPgTypeIdentifier: "public.jwt_token", 
     appendPlugins:[AuthPlugin],
-    additionalGraphQLContextFromRequest:async(req:any)=>{
-      const body = req.body;
-      console.log(body);
-      
+    additionalGraphQLContextFromRequest:async(req:any,res:any)=>{
+      try{
+
+        const {operationName} = req?.body || null
+        console.log(">>>>>>>>>..operationsName",operationName); 
   
-      // Get the operation name from the request (GraphQL Query name)
-      const operationName = body?.operationName;
-      console.log("operationsName",operationName)
-    
-      // Allow GraphiQL introspection queries to run without authentication
-      if (operationName === "IntrospectionQuery") {
-        return { "role": "anonymous" };
+        if (!operationName || operationName === "IntrospectionQuery" || operationName === "UserAuthentication") return {req,res};
+        
+        const data=verifyJwtToken(req)
+
+        console.log("decoded jwt data ",data);
+        
+        console.log("testing",typeof(operationName),typeof(data?.type) );
+        console.log("testing",operationName===data?.type);
+        
+
+        if(!data || operationName!==data?.type) throw new Error("Unauthorized Access")
+
+        return { id:data?.id, type:data?.type, req, res}
+
+      }catch(err){
+        console.log("error from additionalGraphQLContextFromRequest",err);
+        throw err
       }
-    
-      // If no user is logged in and the query isn't introspection, block access
-     
-    
-      return {
-        "role": "user",
-      };
+
     },
-    // pgSettings:async(req)=> ({
-    //   "role" : req.user? req.user.role : "anonymous",
-    //   ...(req.user ? { "user.id": req.user.id.toString() } : {})
-    // }),
   })
 );
 

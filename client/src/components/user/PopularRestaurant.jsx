@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import '../../css/global.css'
 import { getPageUrl } from "../common/GetPage";
 import { GET_REST, TOTAL_PAGE } from "../../graphql/queries/restaurantQuery";
 import { useQuery } from "@apollo/client";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ArrowComponent } from "../common/ArrowComponent";
 
@@ -17,38 +16,38 @@ const PopularRestaurant = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(1);
 
-  const {
-    data: TotalPageCount,
-    loading: PageCountLoading,
-    error: pageCountError,
-  } = useQuery(TOTAL_PAGE, {
-    variables: { name: "products" },
-  });
+  const offset=(page-1)*12
 
   const { data, loading, error } = useQuery(GET_REST, {
-    variables: { page: page },
+    variables: { first:12,offset:offset},
     fetchPolicy: "no-cache",
   });
 
-  const handlePage = (curPage) => {
-    if (page > 0) {
-      navigate(`/home/popular-restaurant?page=${curPage}`);
-    }
-    console.log(curPage);
-  };
-
   const allDishes = (curdata) => {
     console.log(curdata);
-    navigate(`/home/restaurant-dish?id=${curdata.id}`);
+    navigate(`/home/restaurant-dish?page=1`,{state:{id:curdata?.id,name:curdata.name}});
   };
 
-  console.log(">>>>>>>", data);
+  const handlePageChange=(curPage)=>{
+    if (curPage > 0 && curPage <= totalPageCount) {
+        navigate(`/home/popular-restaurant?page=${curPage}`)
+    }
+  }
 
-  return (
+  useEffect(()=>{
+    if(data?.allRestaurants){
+      setTotalPageCount(Math.ceil(data?.allRestaurants?.totalCount/12))
+    }
+  })
+
+
+  console.log(">>>>>>>", data?.allRestaurants);
+
+  return (  
     <div className="common p-4 pb-10 h-screen  overflow-y-scroll">
       <p className="text-center text-3xl pt-4 font-semibold mt-1">Restaurants</p>
       <div className="grid grid-cols-4 gap-4 p-9">
-        {data?.getRest.map((curdata) => (
+        {data?.allRestaurants?.nodes.map((curdata) => (
           <div
             key={curdata.id}
             className={` bg-white p-4 rounded-xl relative text-black shadow-sm hover:shadow-md`}
@@ -72,7 +71,7 @@ const PopularRestaurant = () => {
         ))}
       </div>
 
-      <ArrowComponent name={"restaurant"} page={page} />
+      <ArrowComponent  page={page} totalPage={totalPageCount} handlePageChange={handlePageChange} />
     </div>
   );
 };

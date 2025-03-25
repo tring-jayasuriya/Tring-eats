@@ -12,8 +12,6 @@ import DishPopUp from './DishPopUp'
 import { CategoryData } from '../../category-data/item-list'
 import SmileWoman from '../../assets/dashbord/simly-woman.png'
 
-
-
 export const Dashboard = () => {
 
     const generalImage="https://img.freepik.com/free-vector/retro-restaurant-logo_23-2148490227.jpg?semt=ais_hybrid"
@@ -32,13 +30,13 @@ export const Dashboard = () => {
     };
 
     const allDishes=(curdata)=>{
-        navigate(`/home/restaurant-dish?id=${curdata.id}`)
+        navigate(`/home/restaurant-dish?page=1`,{state:{id:curdata.id,name:curdata.name}})
     }
     
     const handleRoute=(name)=>{
         navigate(`/home/${name}?page=1`)
     }
-
+    
   return (
     <div className='w-full'>
 
@@ -63,7 +61,7 @@ export const Dashboard = () => {
                 <div className='flex gap-x-3'>
 
                     {
-                        randomDish?.getRandomDish.map((data)=>(
+                        randomDish?.allProducts?.nodes.map((data)=>(
                             <div className='card cursor-pointer' onClick={()=>hadldeDish(data)}>
                                 <img className='dish-image' src={data.image}/>
 
@@ -73,7 +71,6 @@ export const Dashboard = () => {
                                 </div>
                             </div>
                         ))
-
                     }
 
                 </div>
@@ -90,7 +87,7 @@ export const Dashboard = () => {
                 <div className='flex gap-x-3'>
 
                     {
-                        data?.getRandomRestaurant.map((data)=>(
+                        data?.allRestaurants?.nodes.map((data)=>(
                             <div className='card cursor-pointer' onClick={()=>allDishes(data)}>
                                 <img className='dish-image' src={data.image || generalImage} />
                                 <p className='text-center w-fit'>{data.name}</p>
