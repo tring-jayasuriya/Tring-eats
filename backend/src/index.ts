@@ -6,7 +6,9 @@ import cookieParser from "cookie-parser";
 import { AuthPlugin } from "./user/plugins/authplugin";
 import dotenv from  "dotenv"
 import cors from "cors"
+import { parse, DocumentNode, OperationDefinitionNode } from "graphql";
 import { verifyJwtToken } from "./utils/verifyJwtToken";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 // import { authenticateJWT } from "./middleware/authMiddleware";
 
 dotenv.config()
@@ -18,7 +20,9 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT 
+console.log("env port",PORT);
+
 
 app.use(
   postgraphile(process.env.DATABASE_URL, "public", {
@@ -26,18 +30,28 @@ app.use(
     graphiql: true, // Enable GraphiQL interface
     enhanceGraphiql: true, // Better UI for GraphiQL
     dynamicJson: true, // Return JSON fields as objects
-    // enableCors: true, // Allow CORS
-    // jwtSecret: process.env.JWT_SECRET_KEY, // Ensure JWT is properly verified
-    // jwtPgTypeIdentifier: "public.jwt_token", 
-    appendPlugins:[AuthPlugin],
+    appendPlugins:[AuthPlugin,ConnectionFilterPlugin],
     additionalGraphQLContextFromRequest:async(req:any,res:any)=>{
       try{
 
-        const {operationName} = req?.body || null
-        console.log(">>>>>>>>>..operationsName",operationName); 
-  
-        if (!operationName || operationName === "IntrospectionQuery" || operationName === "UserAuthentication") return {req,res};
-        
+        const {operationName,query} = req?.body || null
+        console.log(">>>>>>>>>..operationsName",operationName);
+
+        const parsedQuery: DocumentNode | null = query ? parse(query) : null;
+
+        const isIntrospectionQuery = parsedQuery?.definitions?.some(
+            (def) =>
+                def.kind === "OperationDefinition" &&
+                def.operation === "query" &&
+                (def as OperationDefinitionNode).selectionSet.selections.every(
+                    (selection) =>
+                        "name" in selection &&
+                        selection.name?.value === "__schema"
+                )
+        );
+        if (operationName === "UserAuthentication" || isIntrospectionQuery) {
+            return { req, res };
+        }
         const data=verifyJwtToken(req)
 
         console.log("decoded jwt data ",data);
@@ -45,7 +59,6 @@ app.use(
         console.log("testing",typeof(operationName),typeof(data?.type) );
         console.log("testing",operationName===data?.type);
         
-
         if(!data || operationName!==data?.type) throw new Error("Unauthorized Access")
 
         return { id:data?.id, type:data?.type, req, res}
@@ -63,8 +76,16 @@ AppDataSource.initialize()
   .then(() => {
     console.log("Database connected successfully!");
 
-    app.listen(8080, () => {
+    app.listen(PORT, () => {
       console.log(` Server running on http://localhost:8080`);
     });
   })
   .catch((error) => console.error("Database connection failed:", error));
+
+
+
+
+
+
+
+  

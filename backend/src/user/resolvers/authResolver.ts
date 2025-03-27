@@ -1,5 +1,6 @@
 import { setCookie } from "../../utils/setCookie"
-import { login, register } from "../service/user.service"
+import { verifyJwtToken } from "../../utils/verifyJwtToken"
+import { getUserInfo, login, register } from "../service/user.service"
 
 
 export const AuthResolvers={
@@ -24,6 +25,14 @@ export const AuthResolvers={
                     const {res}=context
                     await res.clearCookie("jwttoken", { path: "/", httpOnly: true, sameSite: "Lax" });
                     return "logout successfull"
+                },
+            },
+
+            Query : {
+                getUserInfo:async(_:any,args:any,context:any)=>{
+                    console.log("???????? >>> >> log from getUser info",context?.id);
+
+                    return await getUserInfo(context.id) 
                 }
             }
 }

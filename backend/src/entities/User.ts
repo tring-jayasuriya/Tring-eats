@@ -18,6 +18,10 @@ export class User {
   @Column({nullable:true})
   address? : string
 
+  @Column({nullable:true})
+  city? : string
+
+
   @OneToMany(()=>Cart,(cart)=>cart.user)
   cart: Cart[]
 
