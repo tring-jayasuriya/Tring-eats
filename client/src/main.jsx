@@ -6,13 +6,17 @@ import Router from './routes/Routes.jsx'
 
 import { ApolloProvider } from '@apollo/client'
 import { Client } from './apollo/apolloClient.jsx'
+import { Provider } from 'react-redux'
+import { store } from './redux/store/store.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ApolloProvider client={Client}>
-      <BrowserRouter>
-        <Router/>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Router/>
+        </BrowserRouter>
+      </Provider>
     </ApolloProvider>
   </StrictMode>
 )

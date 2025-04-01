@@ -9,38 +9,43 @@ export const CREATE_RESTAURANT=gql`
     }   
 ` 
 
-export const ADD_TO_CART=gql`
-    mutation addToCart($product_id:Int!, $restaurant_id:Int!, $user_id:Int!){
-        addToCart(product_id:$product_id, restaurant_id:$restaurant_id, user_id:$user_id ){
-            message
-        }
-    }
-`
+export const ADD_TO_CART = gql`
+mutation user($productId: Int!, $userId: Int!) {
+  createCart(input: {cart: {productId: $productId, userId: $userId}}) {
+    clientMutationId
+  }  
+}
+
+`;
 
 export const DELETE_ITEM=gql`
-    mutation deleteItem($user_id:Int!,$product_id:Int!){
-        deleteItem(user_id:$user_id,product_id:$product_id){
-            message 
+    mutation user($id:Int!) {
+        deleteCartById(input: {id: $id}) {
+            clientMutationId
+            deletedCartId
         }
-    }
+}
 `
 
 export const CONFIRM_ORDER=gql`
-    mutation confirmOrder($user_id:Int!,$total_price:Float!,$orderItems:[OrderItem]!){
-        confirmOrder(user_id:$user_id,total_price:$total_price,orderItems:$orderItems){
-            order_id
-            success
-            message
+    mutation user($userId: Int!) {
+  createOrder(input: {order: {userId: $userId}}) {
+        order {
+            id
         }
     }
+}
+
 `
 
 export const UPDATE_RESTAURANT_STATUS=gql`
-    mutation updateRestaurantStatus($id:Int!, $isopen:Boolean!){
-        updateRestaurantStatus(id:$id, isopen:$isopen){
-            isopen
-        }
+    mutation restaurant($isopen: Boolean!, $id: Int!) {
+    updateRestaurantById(input: {restaurantPatch: {isopen: $isopen}, id: $id}) {
+        clientMutationId
     }
+}
+
+
 `
 
 export const ORDER_STATUS=gql`
@@ -50,21 +55,32 @@ export const ORDER_STATUS=gql`
 `
 
 export const ADD_MENU=gql`
-    mutation addMenu($name:String!,$price:Float!,$image:String,$restaurantId:Int!){
-        addMenu(name:$name,price:$price,image:$image,restaurantId:$restaurantId)
-    }
+    mutation restaurant($name: String!, $price: BigFloat! , $restaurantid: Int! , $image: String ) {
+  createProduct(
+    input: {product: {name: $name, price: $price, restaurantid: $restaurantid, image: $image}}){
+    clientMutationId  
+  }
+}
+
 `
 
 export const UPDATE_MENU=gql`
-    mutation updateMenu($name:String!,$price:Float!,$image:String,$id:Int!){
-        updateMenu(name:$name,price:$price,image:$image,id:$id)
-    }
+ mutation restaurant($price: BigFloat!, $name: String!, $image: String!, $id: Int!) {
+    updateProductById(
+        input: {productPatch: {image: $image, name: $name, price: $price}, id: $id}){
+    clientMutationId  
+  }
+}
+
 `
 
 export const DELETE_MENU=gql`
-    mutation deleteMenu($productId:Int!){
-        deleteMenu(productId:$productId)
+    mutation restaurant($id: Int!) {
+    deleteProductById(input: {id: $id}){
+        clientMutationId
     }
+}
+
 `
 
 export const IS_RESTAURANT_OPEN=gql`
@@ -72,5 +88,12 @@ export const IS_RESTAURANT_OPEN=gql`
         isRestaurantOpen(id:$id){
             isopen
         }
+    }
+`
+
+
+export const INSERT_ORDER_ITEM=gql`
+    mutation user($orderItems: [BulkOrderItemInput!]!) {
+        createOrderItemsBulk(orderItems: $orderItems ) 
     }
 `

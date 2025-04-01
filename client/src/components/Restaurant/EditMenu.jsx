@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ADD_MENU, DELETE_MENU, UPDATE_MENU } from '../../graphql/mutation/restaurantMutation'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import { getLocalStorage } from '../common/GetLocalStorage'
 
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RestaurantPopUp } from '../../restaurant/RestaurantPopUp'
+import { UserContext } from '../../App'
 
 export const EditMenu = ({data,mode,popup}) => {
 
@@ -15,6 +16,7 @@ export const EditMenu = ({data,mode,popup}) => {
     const navigate=useNavigate()
     const [addMenu]=useMutation(ADD_MENU,{fetchPolicy:"no-cache"})
     const [updateMenu]=useMutation(UPDATE_MENU,{fetchPolicy:"no-cache"})
+    const {restaurantData}=useContext(UserContext)
 
     const [deleteMenu]=useMutation(DELETE_MENU,{fetchPolicy:"no-cache"})
 
@@ -31,11 +33,6 @@ export const EditMenu = ({data,mode,popup}) => {
         defaultValues:data || {name:'',price:''}
       })
 
-      console.log(data);
-
-      
-  
-  
       const handleImage=(e)=>{
         const file=e.target.files[0]
         if(file){
@@ -52,23 +49,26 @@ export const EditMenu = ({data,mode,popup}) => {
         }
       }
 
-
       const handleUpdateMenu=async(Data)=>{
-            const {data}= await updateMenu({variables:{name:Data.name,price:parseFloat(Data.price),image:image || Data.image,id:Data.id}})
-            toast.success(data.updateMenu)
+            console.log("from handle update", Data);
+            await updateMenu({variables:{name:Data.name, price:parseFloat(Data.price),image:image || Data.image, id:Data.id}})
+            toast.success("menu updated successfully")
             popup(false)
       }
 
       const handleAddMenu=async(Data)=>{
 
-            const restaurantId=getLocalStorage("restaurant").id
-            const {data}=await addMenu({variables:{name:Data.name,price:parseFloat(Data.price),image:image,restaurantId:restaurantId }} )
-            toast.success(data.addMenu)
+            console.log("add menu log",Data,image);
+            console.log(restaurantData);
+            await addMenu({variables:{name:Data.name,price:parseFloat(Data.price),image:image,restaurantid:restaurantData.id }} )
+            toast.success("item added successfully")
             navigate("/restaurant?type=dashboard")
 
       }
 
       const handleDelteMenu=(Data,e)=>{
+        console.log("delete data", Data);
+        
         e.stopPropagation()
         setDeleteID(Data.id)
         setDeleteMenu(true)
@@ -91,17 +91,16 @@ export const EditMenu = ({data,mode,popup}) => {
             console.log("log from handle confirm delete >>>>>>>.",id);
             
 
-            const {data}=await deleteMenu({variables:{productId:id}})
+            const {data:deleteRes} =await deleteMenu({variables:{id:id}})
 
-            if(data?.deleteMenu){
-                toast.success(data.deleteMenu)
-                setDeleteMenu(false)
-                editPopup(false)
-                navigate("/restaurant?type=dashboard")
+            if(deleteRes?.deleteProductById){
 
+              toast.success("item deleted successfully ")
+              setDeleteMenu(false)
+              editPopup(false)
+              navigate("/restaurant?type=dashboard")
             }
-
-        }
+          }
 
   
     return (

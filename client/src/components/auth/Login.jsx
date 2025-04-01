@@ -7,8 +7,6 @@ import SideImage from '../../assets/auth-images/auth-side-image.png'
 
 import '../../css/Authcss/auth.css'
 
-import { IoIosCheckbox } from "react-icons/io";
-import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_USER } from '../../graphql/queries/userQuery';
 import { GET_RESTAURANT } from '../../graphql/queries/restaurantQuery'
@@ -30,11 +28,10 @@ export const Login = () => {
     
     const navigate=useNavigate()
 
-    const currentData={
-        restaurant:GET_RESTAURANT,
-        user:GET_USER
-    }
-    const path=currentData[componentName] ??  GET_USER
+    const [getData,{data,loading,error}]=useMutation(GET_USER,{fetchPolicy:"no-cache"})
+
+    console.log(componentName,"componentName");
+    
 
     const {
         register,
@@ -42,7 +39,6 @@ export const Login = () => {
         formState:{errors},
     }=useForm()
     
-    const [getData,{data,loading,error}]=useMutation(GET_USER,{fetchPolicy:"no-cache"})
 
 
     const handleSignUp=()=>{
@@ -55,7 +51,7 @@ export const Login = () => {
             console.log(userdata);
 
             await getData({
-                variables:{email:userdata.email,password:userdata.password,type:"user"}
+                variables:{email:userdata.email,password:userdata.password,type:componentName}
             })
 
             console.log("log from handle login");
@@ -67,7 +63,7 @@ export const Login = () => {
         }
     }
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
         // if(data?.getData?.emailError){
         //     setPasswordError(false)
@@ -92,19 +88,20 @@ export const Login = () => {
         //     componentName==="user"? navigate("/home?type=dashboard") : navigate("/restaurant")
         // }
 
-    },[data])
+    // },[data])
 
     if(data?.login){ 
         console.log(data?.login);
-        navigate("/home?type=dashboard")
+        console.log("if data logon");
+        
+        if(data?.login) componentName==="user"? navigate("/home?type=dashboard") : navigate("/restaurant")
     }
 
   return (
+
         <div className='main-container'>            
 
             <div className='main-container-wrapper'>
-
-                {/* <p className='font-semibold text-4xl mt-2 ml-5'>TRING <span className='text-ctmgreen'>EATS</span> </p> */}
 
                 <div  className='flex justify-center items-center'>
                     <div className=' w-full p-9  md:w-[80%] md:p-5' >

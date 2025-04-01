@@ -1,45 +1,69 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../../css/global.css'
 import { getLocalStorage } from '../common/GetLocalStorage'
 import { useMutation, useQuery } from '@apollo/client'
-import { GET_MENU, GET_STATUS } from '../../graphql/queries/restaurantQuery'
+import { GET_MENU, GET_RESTAURANT_INFO, GET_STATUS, RESTAURANT_MENU } from '../../graphql/queries/restaurantQuery'
 import { UPDATE_RESTAURANT_STATUS } from '../../graphql/mutation/restaurantMutation'
 import { FaRegEdit } from "react-icons/fa";
 import { EditMenu } from './EditMenu'
 import CommonImage from '../../assets/dishes/common-image.jpg'
+import { GET_USER_INFO } from '../../graphql/queries/userQuery'
+import {useDispatch,useSelector} from 'react-redux'
+import { setRestaurantData } from '../../redux/slice/RestaurantSlice'
+import { UserContext } from '../../App'
+
 
 const Overview = () => {
 
-  const restaurantInfo=getLocalStorage("restaurant")
-  const restaurantName=restaurantInfo?.name
-  const restaurantId=restaurantInfo?.id
+  const {restaurantData,setRestaurantData}=useContext(UserContext)
 
   const [restaurantStatus,setRestaurantStatus]=useState(false)
   const [editPopUp,setEditPopUp]=useState(false)
   const [editItems,setEditItems]=useState(null)
 
+  const {data,loading,error}=useQuery(GET_RESTAURANT_INFO)
 
-  const {data,loading,error}=useQuery(GET_MENU,{fetchPolicy:"no-cache", variables:{id:restaurantId}})
-  const {data:status}=useQuery(GET_STATUS,{fetchPolicy:"no-cache",variables:{id:restaurantId}})
+  useEffect(() => {
+    if (data?.getRestaurantInfo) {
+      setRestaurantData(data?.getRestaurantInfo)
+    }
+  }, [data?.getRestaurantInfo]);
+  
+
+  console.log("context data",restaurantData);
+  
+
+
+  const {data:restMenu}=useQuery(RESTAURANT_MENU,{
+    fetchPolicy:"no-cache",
+    variables:{restaurantid:restaurantData.id},
+    skip:!restaurantData?.id})
+  // const {data:status}=useQuery(GET_STATUS,{fetchPolicy:"no-cache",variables:{id:restaurantId}})
   const [updateRestaurantStatus]=useMutation(UPDATE_RESTAURANT_STATUS,{fetchPolicy:"no-cache"})
 
-  useEffect(()=>{
-    console.log(">>>>> menu",data?.getMenu);
-  },[data])
+  // useEffect(()=>{
+  //   console.log(">>>>> menu",data?.getMenu);
+  // },[data])
+
+  console.log(" restaurant menu" ,restMenu?.allProducts );
+  
 
   
 
   useEffect(()=>{
-    if(status?.getStatus){
-      setRestaurantStatus(status.getStatus.isopen)
+    if(restaurantData){
+      setRestaurantStatus(restaurantData?.isopen)
     }
-  },[status])
+  },[restaurantData])
 
-
-
-  console.log("EDIT popup",editPopUp);
-
+  console.log(restaurantStatus,"restaurantStatus");
   
+
+  console.log("open  status",restaurantData?.isopen);
+  
+
+
+
 
   const handleRestaurantStatus=async()=>{
       console.log("before",restaurantStatus);
@@ -47,8 +71,7 @@ const Overview = () => {
       
       setRestaurantStatus((prev)=>!prev)
       
-      const {data:updateStatus}= await updateRestaurantStatus({variables:{id:restaurantId,isopen:currStatus}})
-
+      const {data:updateStatus}= await updateRestaurantStatus({variables:{isopen:!restaurantStatus,id:restaurantData.id}})
       
   }
 
@@ -57,8 +80,6 @@ const Overview = () => {
       setEditItems(editData)
   }
 
-  
-  
 
   return (
     <div className=' w-full min-h-screen h-full p-6 space-y-5'>
@@ -70,11 +91,11 @@ const Overview = () => {
 
           <div className='flex bg-white w-full p-2 rounded-lg justify-between items-center'>
 
-                <p>{restaurantName}</p>
+                <p>{restaurantData?.name}</p>
 
               <div className='flex gap-x-5 w-fit'>
                 <p>Restaurant Status</p>
-                <button onClick={()=>handleRestaurantStatus()} className={`${restaurantStatus?"bg-green-500" :"bg-red-500"}  w-full rounded-lg text-white`}>{restaurantStatus? "open" : "closed"}</button>
+                <button onClick={()=>handleRestaurantStatus()} className={`${restaurantStatus?"bg-green-500" :"bg-red-500"}  w-full rounded-lg text-white`}>{restaurantStatus? "Open" : "Closed" }</button>
               </div>
           </div>
 
@@ -85,9 +106,9 @@ const Overview = () => {
 
             { 
 
-              data?.getMenu.length>0 &&
+            restMenu?.allProducts &&
               
-              data.getMenu.map((Data,index)=>(
+            restMenu?.allProducts?.nodes.map((Data,index)=>(
                 
                 <div className='big-card'>
 

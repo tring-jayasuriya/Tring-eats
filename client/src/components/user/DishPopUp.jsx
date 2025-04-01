@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import '../../css/global.css'
 
@@ -8,10 +8,13 @@ import { ADD_TO_CART } from '../../graphql/mutation/restaurantMutation';
 import { RxCross2 } from "react-icons/rx";
 import { toast } from 'react-toastify';
 import { getLocalStorage } from '../common/GetLocalStorage';
+import { UserContext } from '../../App';
 
 const DishPopUp = ({Data,setIsDishClicked}) => {
 
     console.log("popup data",Data);
+    const {userData}=useContext(UserContext)
+
     
 
     const [addToCart,{data,loading,error}]=useMutation(ADD_TO_CART,{fetchPolicy:"no-cache"})
@@ -22,8 +25,12 @@ const DishPopUp = ({Data,setIsDishClicked}) => {
         
         try{
 
+            console.log("product id",Data.id);
+            console.log("user id",userData.id);
+            
+
             const {data}=await addToCart({
-                variables:{product_id:parseInt(dup.id),restaurant_id:dup.restaurant_id,user_id:userId}
+                variables:{productId:Data.id, userId:userData.id}
             })
 
             toast.success("dish added to cart")
@@ -35,7 +42,7 @@ const DishPopUp = ({Data,setIsDishClicked}) => {
 
         }catch(err){
             console.log(err);
-            toast.error(err.message)
+            toast.error("product already in cart")
             setTimeout(()=>{
                 setIsDishClicked(false)
             },500)

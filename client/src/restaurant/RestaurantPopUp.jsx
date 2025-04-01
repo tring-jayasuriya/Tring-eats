@@ -4,11 +4,13 @@ import { deleteLocalStorage } from '../components/common/GetLocalStorage'
 import { useMutation } from '@apollo/client'
 import { DELETE_MENU } from '../graphql/mutation/restaurantMutation'
 import { toast } from 'react-toastify'
+import { LOGOUT } from '../graphql/mutation/userMutation'
 
 export const RestaurantPopUp = ({message,flag, id, editPopup,handleConfirmDelete}) => {
 
     const navigate=useNavigate()
     const [deleteMenu]=useMutation(DELETE_MENU,{fetchPolicy:"no-cache"})
+    const [logout]=useMutation(LOGOUT,{fetchPolicy:"no-cache"})
 
     const data={
         action: flag==="delete"? "Delete" : "Logout"
@@ -24,12 +26,12 @@ export const RestaurantPopUp = ({message,flag, id, editPopup,handleConfirmDelete
 
     }
 
-    const handleLogout=()=>{
+    const handleLogout=async()=>{
 
-        deleteLocalStorage("restaurant")
+        await logout()
         toast.success("logout successfull")
         navigate("/login?tag=restaurant")
-
+        
     }
 
     const handleDelete=()=>{

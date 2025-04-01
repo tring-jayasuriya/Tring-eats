@@ -2,20 +2,20 @@ import { ToastContainer } from 'react-toastify'
 import './App.css'
 import { Outlet } from 'react-router-dom'
 import { createContext, useState } from 'react'
-
-const userContext=createContext()
+ 
+export  const UserContext=createContext()
 
 function App() {
 
   const [userData,setUserData]=useState({})
+  const [restaurantData,setRestaurantData]=useState({})
 
   return (
     <div>
-      <userContext.Provider value={{userData,setUserData}}>
+      <UserContext.Provider value={{userData,setUserData,restaurantData,setRestaurantData}}>
         <ToastContainer autoClose={2000}  draggable />
         <Outlet/>
-      </userContext.Provider>
-
+      </UserContext.Provider>
     </div>
   )
 }

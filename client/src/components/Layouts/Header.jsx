@@ -1,18 +1,24 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { deleteLocalStorage, getLocalStorage } from '../common/GetLocalStorage'
 import { FiSearch } from 'react-icons/fi'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { LOGOUT } from '../../graphql/mutation/userMutation'
 import { toast } from 'react-toastify'
+import { GET_USER_INFO } from '../../graphql/queries/userQuery'
+import { UserContext } from '../../App'
 
 export const Header = () => {
 
     const navigate=useNavigate()
-    const user=getLocalStorage("user")
     const[search,setSearch]=useState("")
     const [logout, {data,loading,error}]=useMutation(LOGOUT,{fetchPolicy:"no-cache"})
+    const {data:userInfo}=useQuery(GET_USER_INFO,{fetchPolicy:"no-cache"})
+    const {userData,setUserData}=useContext(UserContext)
+
+    console.log( "context data",userData);
+    
 
     const handleSearch=(e)=>{
         setSearch(e.target.value)
@@ -32,16 +38,23 @@ export const Header = () => {
         navigate("/login")
     }
 
+    useEffect(()=>{
+
+        if(userInfo?.getUserInfo){
+            setUserData(userInfo?.getUserInfo)
+        }
+
+    },[userInfo])
+
 
   return (
     
-    <div className='flex space-x-48 items-center mb-6'>
-        <p className='font-semibold text-2xl'>Hello, {user?.name} </p>
+    <div className='flex space-x-48 items-center justify-center mb-6 '>
+        <p className='font-semibold text-2xl'>Hello, {userData?.name} </p>
         <div className='flex bg-white rounded-lg items-center pl-3'>
             <FiSearch className='text-mango' /> 
             <input onKeyDown={(e)=>handleKeyDown(e)} onChange={(e)=>handleSearch(e)} className='p-3 rounded-lg text-sm outline-none' type='text' placeholder='what do you want to eat today'/>
         </div>
-        
 
         <button className='logout bg-mango' onClick={()=>handleLogOut()}>Logout</button>
     </div>

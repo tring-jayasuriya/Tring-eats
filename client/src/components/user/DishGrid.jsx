@@ -1,26 +1,45 @@
-import React, { useState } from 'react'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import React, { useEffect, useState } from 'react'
 import DishPopUp from './DishPopUp'
+import { useNavigate } from 'react-router-dom'
+import { ArrowComponent } from '../common/ArrowComponent'
 
-const DishGrid = ({items,page}) => {
+const DishGrid = ({items,page,search}) => {
 
+    const navigate=useNavigate()
     const [isDishClicked, setIsDishClicked]=useState(false)
     const [popupData,setPopupData]=useState({})
+    const [totalPage,setTotalPage]=useState(0)
+
+    console.log("dish grid  data",items);
+    console.log("dish grid  page",page);
+    console.log(" what i search",search);
+    console.log("totalPage",totalPage);
 
     const hadldeDish=(curdata)=>{
-        console.log("curdata",curdata);
-        
         setIsDishClicked(!isDishClicked)
         setPopupData(curdata)
-        console.log(isDishClicked);
-        
     }
+
+    const handlePageChange=(curPage)=>{
+        if (curPage > 0 && curPage <= totalPage) 
+            navigate(`/home/search?page=${curPage}`,{state:{search:search}})
+    }
+
+    useEffect(()=>{
+        setTotalPage(Math.ceil(items.totalCount/12))
+    })
+
+
 
   return (
     <div className='bg-litMango px-3 pb-9'>
 
+        {totalPage===0 && <p>No  dishes found</p>} 
+
+        {
+            totalPage >0 &&
             <div className="grid grid-cols-4 gap-4">
-            {items.map((curdata) => (
+            {items?.nodes?.map((curdata) => (
                 <div key={curdata.id}className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md" onClick={()=>hadldeDish(curdata)} >
                 <img
                     src={curdata.image}
@@ -33,13 +52,11 @@ const DishGrid = ({items,page}) => {
                 </div>
                 </div>
             ))}
-        </div>
+            </div>
+        }
 
-        <div className='flex justify-center items-center space-x-8 mt-10 text-lg'>
-            <FaArrowLeft onClick={()=>handlePage(page-1)} className='arrow'/>
-            <p>{page}</p>
-            <FaArrowRight onClick={()=>handlePage(page+1)} className='arrow' />
-        </div>
+        {totalPage>0 && <ArrowComponent page={page} totalPage={totalPage} handlePageChange={handlePageChange} />}
+
 
         {isDishClicked && <DishPopUp Data={popupData} setIsDishClicked={setIsDishClicked} />}
 

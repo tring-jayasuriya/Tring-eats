@@ -42,9 +42,7 @@ const Router=()=>{
                 <Route path="restaurant/signup" element={
                         <RestaurantSignUp/>
                     }/>
-                <Route path="restaurant" element={
-                        <RestaurantDashboard/>
-                    }/>
+                <Route path="restaurant" element={ <RestaurantDashboard/> }/>
                 <Route path="*" element={<PageNotFound/>}/>
             </Route>
 

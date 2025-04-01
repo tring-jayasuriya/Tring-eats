@@ -50,16 +50,25 @@ export const GET_REST = gql`
 `;
 
 export const GET_FROM_CART = gql`
-  query getCartItems($id: Int!) {
-    getCartItems(id: $id) {
-      name
-      image
-      price
-      restaurant_id
-      restaurant_name
+query user($userId: Int) {
+  allCarts(condition: {userId: $userId}) {
+    nodes {
+      productByProductId {
+        id
+        image
+        isavailable
+        name
+        price
+        restaurantid
+        restaurantByRestaurantid {
+          name
+          isopen
+        }
+      }
       id
     }
   }
+}
 `;
 
 export const GET_MENU = gql`
@@ -109,17 +118,23 @@ export const ORDER_DETAILS = gql`
 `;
 
 export const SEARCH_DISH = gql`
-  query searchDish($name: String!, $page: Int!) {
-    searchDish(name: $name, page: $page) {
+  query user($name: String!, $offset:Int!) {
+  allProducts(filter: {name: {includesInsensitive: $name}}, offset: $offset, first: 12) {
+    nodes {
       id
       name
       price
-      restaurant_id
-      restaurant_name
       image
-      totalPage
+      restaurantByRestaurantid {
+        id
+        name
+        isopen
+      }
     }
+    totalCount
   }
+}
+
 `;
 
 export const GET_ORDER_HISTORY = gql`
@@ -200,4 +215,31 @@ export const GET_RANDOM_RESTAURANT=gql`
         }
       }
     }
+`
+
+
+
+export const GET_RESTAURANT_INFO=gql`
+  query restaurant {
+    getRestaurantInfo {
+      id
+      isopen
+      name
+    }
+  }
+`
+
+
+export const RESTAURANT_MENU=gql`
+  query restaurant($restaurantid: Int) {
+    allProducts(condition: {restaurantid: $restaurantid}) {
+      nodes {
+        id
+        image
+        isavailable
+        name
+        price
+      }
+    }
+  }
 `

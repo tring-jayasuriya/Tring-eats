@@ -54,7 +54,7 @@ app.use(
         }
         const data=verifyJwtToken(req)
 
-        console.log("decoded jwt data ",data);
+        console.log("decoded jwt data ",data, "operationName",operationName);
         
         console.log("testing",typeof(operationName),typeof(data?.type) );
         console.log("testing",operationName===data?.type);
